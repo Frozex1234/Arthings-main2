@@ -139,19 +139,35 @@ const config = {
     }
 };
 
-if (config.storage.driver === 'blob' && !config.storage.blobToken && isProduction) {
-    problems.push('BLOB_READ_WRITE_TOKEN is required when STORAGE_DRIVER=blob');
+/**
+ * Misconfiguration is split by blast radius.
+ *
+ * `problems` are fatal: the process cannot run correctly or safely at all
+ * (no database, or a guessable session secret in production).
+ *
+ * `warnings` degrade one feature but leave the rest of the site serving. A
+ * missing SMTP host should break signup emails — not take down browsing,
+ * search and the map for everyone. Refusing to boot over it would turn a
+ * partial outage into a total one.
+ */
+const warnings = [];
+
+if (config.storage.driver === 'blob' && !config.storage.blobToken) {
+    warnings.push('BLOB_READ_WRITE_TOKEN is not set — image uploads will fail.');
 }
 
 if (config.storage.driver === 'cloudinary' && !config.storage.cloudinary.isConfigured) {
-    problems.push(
-        'CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET ' +
-        'are required when STORAGE_DRIVER=cloudinary'
+    warnings.push(
+        'CLOUDINARY_CLOUD_NAME / CLOUDINARY_API_KEY / CLOUDINARY_API_SECRET are ' +
+        'not set — image uploads will fail.'
     );
 }
 
 if (isProduction && !config.mail.isConfigured) {
-    problems.push('SMTP_HOST, SMTP_USER and SMTP_PASSWORD are required in production');
+    warnings.push(
+        'SMTP is not configured — verification and notification emails cannot ' +
+        'be sent, so new users will not be able to confirm their address.'
+    );
 }
 
 if (problems.length) {
@@ -165,6 +181,12 @@ if (problems.length) {
     // Never boot a production process with a broken security configuration.
     if (isProduction) throw new Error(message);
     console.warn(`\n⚠️  ${message}\n`);
+}
+
+if (warnings.length) {
+    console.warn(
+        ['\n⚠️  Degraded configuration:', ...warnings.map(w => `  - ${w}`), ''].join('\n')
+    );
 }
 
 module.exports = config;

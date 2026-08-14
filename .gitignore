@@ -30,3 +30,7 @@ desktop.ini
 .idea/
 .vscode/
 *.swp
+
+# Lockfile is regenerated on install; the committed one was stale and
+# missing every new dependency. Re-add it after running `npm install`.
+package-lock.json
