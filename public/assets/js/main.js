@@ -21,7 +21,7 @@ function getCsrfToken() {
 
 /**
  * Error carrying the server's structured response, so callers can react to
- * `code` (e.g. EMAIL_NOT_VERIFIED) and render per-field messages.
+ * `code` and render per-field validation messages.
  */
 class ApiError extends Error {
     constructor(message, { status, code, fields } = {}) {
@@ -62,15 +62,6 @@ const api = {
         const payload = text ? JSON.parse(text) : {};
 
         if (!res.ok) {
-            // An unverified account should land on the verification screen
-            // rather than a dead-end error message.
-            if (payload.code === 'EMAIL_NOT_VERIFIED' && payload.email) {
-                const target = `/pages/verify-email.html?email=${encodeURIComponent(payload.email)}`;
-                if (!window.location.pathname.endsWith('verify-email.html')) {
-                    window.location.href = target;
-                }
-            }
-
             throw new ApiError(payload.error || 'Request failed', {
                 status: res.status,
                 code: payload.code,

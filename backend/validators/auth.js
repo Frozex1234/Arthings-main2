@@ -22,26 +22,9 @@ const register = z.object({
 const login = z.object({
     email,
     // Deliberately not the strict `password` schema: rejecting a short
-    // password at validation time would tell an attacker the policy and
-    // return a different shape than a normal failed login.
+    // password at validation time would reveal the policy and return a
+    // different response shape than a normal failed login.
     password: z.string().min(1, 'Password is required').max(200)
-});
-
-const verifyEmail = z.object({
-    email,
-    code: z
-        .string({ required_error: 'Verification code is required' })
-        .trim()
-        .regex(/^\d{4,10}$/, 'Enter the numeric code from your email')
-});
-
-const resend = z.object({ email });
-
-const forgotPassword = z.object({ email });
-
-const resetPassword = z.object({
-    token: z.string().min(10, 'Invalid or expired link').max(300),
-    password
 });
 
 const changePassword = z.object({
@@ -58,10 +41,6 @@ const updateProfile = z.object({
 module.exports = {
     register,
     login,
-    verifyEmail,
-    resend,
-    forgotPassword,
-    resetPassword,
     changePassword,
     updateProfile
 };

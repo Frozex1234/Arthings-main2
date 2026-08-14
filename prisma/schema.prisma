@@ -27,12 +27,9 @@ model User {
   city         String?  @db.VarChar(100)
   avatar       String?  @db.VarChar(500)
 
-  // `isVerified` is the trust badge shown on listings (identity confirmed by
-  // staff). Email confirmation is tracked separately by `emailVerifiedAt` so
-  // the two cannot be conflated.
-  isVerified      Boolean   @default(false) @map("is_verified")
-  emailVerifiedAt DateTime? @map("email_verified_at")
-  isAdmin         Boolean   @default(false) @map("is_admin")
+  // Trust badge shown on listings — identity confirmed by staff.
+  isVerified Boolean @default(false) @map("is_verified")
+  isAdmin    Boolean @default(false) @map("is_admin")
 
   // Denormalised rating aggregates. Maintained on rating write so listing and
   // map queries never need a correlated AVG() over the ratings table.
@@ -43,52 +40,19 @@ model User {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // Relations
-  items              Item[]
-  rentalsAsRenter    Rental[]            @relation("RenterRentals")
-  favorites          Favorite[]
-  legalConsents      LegalConsent[]
-  ratingsGiven       Rating[]            @relation("RatingFrom")
-  ratingsReceived    Rating[]            @relation("RatingTo")
-  rentalRequests     RentalRequest[]
-  messagesSent       Message[]           @relation("MessagesSent")
-  messagesReceived   Message[]           @relation("MessagesReceived")
-  verificationTokens VerificationToken[]
-  notifications      Notification[]
-  rentalEvents       RentalEvent[]
+  items            Item[]
+  rentalsAsRenter  Rental[]        @relation("RenterRentals")
+  favorites        Favorite[]
+  legalConsents    LegalConsent[]
+  ratingsGiven     Rating[]        @relation("RatingFrom")
+  ratingsReceived  Rating[]        @relation("RatingTo")
+  rentalRequests   RentalRequest[]
+  messagesSent     Message[]       @relation("MessagesSent")
+  messagesReceived Message[]       @relation("MessagesReceived")
+  notifications    Notification[]
+  rentalEvents     RentalEvent[]
 
-  @@index([emailVerifiedAt])
   @@map("users")
-}
-
-// ===========================================
-// Verification Token Model
-// ===========================================
-// Backs email confirmation and password reset. Only the *hash* of the secret
-// is stored, so a database leak cannot be replayed to take over accounts.
-
-enum VerificationPurpose {
-  email_verification
-  password_reset
-}
-
-model VerificationToken {
-  id        Int                 @id @default(autoincrement())
-  userId    Int                 @map("user_id")
-  purpose   VerificationPurpose
-  tokenHash String              @map("token_hash") @db.VarChar(255)
-
-  expiresAt  DateTime  @map("expires_at")
-  consumedAt DateTime? @map("consumed_at")
-
-  // Guards against brute-forcing a short numeric code.
-  attempts  Int      @default(0)
-  createdAt DateTime @default(now()) @map("created_at")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId, purpose, consumedAt])
-  @@index([expiresAt])
-  @@map("verification_tokens")
 }
 
 // ===========================================

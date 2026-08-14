@@ -1,6 +1,5 @@
 -- ===========================================================================
--- Arthings — map geocoding, housing module, rent-request lifecycle and
--- email verification.
+-- Arthings — map geocoding, housing module and the rent-request lifecycle.
 -- ===========================================================================
 -- Hand-written to match the existing migration style. Safe to run against a
 -- database that already has the housing/messages migration applied.
@@ -15,7 +14,6 @@
 CREATE TYPE "ListingType" AS ENUM ('item', 'housing');
 CREATE TYPE "HousingCategory" AS ENUM ('apartment', 'house', 'room', 'hostel', 'commercial', 'garage');
 CREATE TYPE "RentalPeriod" AS ENUM ('daily', 'weekly', 'monthly', 'short_term', 'long_term');
-CREATE TYPE "VerificationPurpose" AS ENUM ('email_verification', 'password_reset');
 CREATE TYPE "NotificationType" AS ENUM (
     'rental_requested',
     'rental_accepted',
@@ -28,18 +26,11 @@ CREATE TYPE "NotificationType" AS ENUM (
 );
 
 -- ---------------------------------------------------------------------------
--- Users: email confirmation + denormalised rating aggregates
+-- Users: denormalised rating aggregates
 -- ---------------------------------------------------------------------------
 ALTER TABLE "users"
-    ADD COLUMN "email_verified_at" TIMESTAMP(3),
     ADD COLUMN "rating_avg" DECIMAL(3,2) NOT NULL DEFAULT 0,
     ADD COLUMN "rating_count" INTEGER NOT NULL DEFAULT 0;
-
-CREATE INDEX "users_email_verified_at_idx" ON "users"("email_verified_at");
-
--- Existing accounts predate email confirmation. Grandfather them in so the
--- new gate does not lock out the current user base.
-UPDATE "users" SET "email_verified_at" = "created_at" WHERE "email_verified_at" IS NULL;
 
 -- Backfill rating aggregates from historical ratings.
 UPDATE "users" u
@@ -103,27 +94,6 @@ ALTER TABLE "rentals"
 
 CREATE INDEX "rentals_item_id_status_start_date_end_date_idx"
     ON "rentals"("item_id", "status", "start_date", "end_date");
-
--- ---------------------------------------------------------------------------
--- Verification tokens
--- ---------------------------------------------------------------------------
-CREATE TABLE "verification_tokens" (
-    "id" SERIAL NOT NULL,
-    "user_id" INTEGER NOT NULL,
-    "purpose" "VerificationPurpose" NOT NULL,
-    "token_hash" VARCHAR(255) NOT NULL,
-    "expires_at" TIMESTAMP(3) NOT NULL,
-    "consumed_at" TIMESTAMP(3),
-    "attempts" INTEGER NOT NULL DEFAULT 0,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT "verification_tokens_pkey" PRIMARY KEY ("id"),
-    CONSTRAINT "verification_tokens_user_id_fkey" FOREIGN KEY ("user_id")
-        REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE INDEX "verification_tokens_user_id_purpose_consumed_at_idx"
-    ON "verification_tokens"("user_id", "purpose", "consumed_at");
-CREATE INDEX "verification_tokens_expires_at_idx" ON "verification_tokens"("expires_at");
 
 -- ---------------------------------------------------------------------------
 -- Item availability (owner-declared blocked ranges)

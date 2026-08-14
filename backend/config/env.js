@@ -40,18 +40,12 @@ function integer(name, fallback) {
     return Number.isFinite(parsed) ? parsed : fallback;
 }
 
-function boolean(name, fallback = false) {
-    const raw = optional(name);
-    if (raw === null) return fallback;
-    return ['1', 'true', 'yes', 'on'].includes(raw.toLowerCase());
-}
-
 const config = {
     isProduction,
     nodeEnv: process.env.NODE_ENV || 'development',
     port: integer('PORT', 3000),
 
-    /** Public origin, used to build links inside outgoing emails. */
+    /** Public origin, used wherever an absolute link is needed. */
     appUrl: optional('APP_URL', `http://localhost:${integer('PORT', 3000)}`).replace(/\/$/, ''),
     appName: optional('APP_NAME', 'Arthings'),
 
@@ -68,29 +62,6 @@ const config = {
         }),
         maxAgeMs: integer('SESSION_MAX_AGE_HOURS', 24 * 7) * 60 * 60 * 1000,
         tableName: optional('SESSION_TABLE', 'user_sessions')
-    },
-
-    mail: {
-        // When SMTP is not configured, the mailer falls back to a console
-        // transport so local development never blocks on credentials.
-        host: optional('SMTP_HOST'),
-        port: integer('SMTP_PORT', 587),
-        secure: boolean('SMTP_SECURE', false),
-        user: optional('SMTP_USER'),
-        password: optional('SMTP_PASSWORD'),
-        from: optional('MAIL_FROM', 'Arthings <no-reply@arthings.local>'),
-        get isConfigured() {
-            return Boolean(this.host && this.user && this.password);
-        }
-    },
-
-    verification: {
-        codeLength: integer('VERIFICATION_CODE_LENGTH', 6),
-        ttlMinutes: integer('VERIFICATION_TTL_MINUTES', 15),
-        maxAttempts: integer('VERIFICATION_MAX_ATTEMPTS', 5),
-        resendCooldownSeconds: integer('VERIFICATION_RESEND_COOLDOWN', 60),
-        /** Password reset links live longer than login codes but still expire. */
-        resetTtlMinutes: integer('PASSWORD_RESET_TTL_MINUTES', 60)
     },
 
     geocoding: {
@@ -146,7 +117,7 @@ const config = {
  * (no database, or a guessable session secret in production).
  *
  * `warnings` degrade one feature but leave the rest of the site serving. A
- * missing SMTP host should break signup emails — not take down browsing,
+ * missing storage key should break image uploads — not take down browsing,
  * search and the map for everyone. Refusing to boot over it would turn a
  * partial outage into a total one.
  */
@@ -160,13 +131,6 @@ if (config.storage.driver === 'cloudinary' && !config.storage.cloudinary.isConfi
     warnings.push(
         'CLOUDINARY_CLOUD_NAME / CLOUDINARY_API_KEY / CLOUDINARY_API_SECRET are ' +
         'not set — image uploads will fail.'
-    );
-}
-
-if (isProduction && !config.mail.isConfigured) {
-    warnings.push(
-        'SMTP is not configured — verification and notification emails cannot ' +
-        'be sent, so new users will not be able to confirm their address.'
     );
 }
 

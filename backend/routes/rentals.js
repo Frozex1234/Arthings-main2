@@ -21,10 +21,9 @@ const express = require('express');
 const prisma = require('../db/db');
 const listings = require('../services/listings');
 const notifications = require('../services/notifications');
-const mail = require('../services/mail');
 const { validate } = require('../middleware/validate');
 const { limiters } = require('../middleware/security');
-const { requireAuth, requireVerifiedEmail } = require('../middleware/auth');
+const { requireAuth } = require('../middleware/auth');
 const schemas = require('../validators/rentals');
 
 const router = express.Router();
@@ -243,7 +242,6 @@ router.get('/:id', requireAuth, validate({ params: schemas.idParam }), async (re
 router.post(
     '/',
     requireAuth,
-    requireVerifiedEmail,
     limiters.write,
     validate({ body: schemas.create }),
     async (req, res) => {
@@ -348,23 +346,12 @@ router.post(
             });
 
             const link = `/pages/rental-requests.html?role=owner&rental=rental-${rental.id}`;
-            await notifications.notifyAndEmail({
+            await notifications.notify({
                 userId: item.userId,
                 type: 'rental_requested',
                 title: `Новий запит на «${item.title}»`,
                 body: `${renter.name} хоче орендувати з ${isoDay(startDate)} до ${isoDay(endDate)}.`,
-                link,
-                email: {
-                    to: item.user.email,
-                    ...mail.templates.rentalRequested({
-                        ownerName: item.user.name,
-                        renterName: renter.name,
-                        itemTitle: item.title,
-                        startDate: isoDay(startDate),
-                        endDate: isoDay(endDate),
-                        url: notifications.absoluteUrl(link)
-                    })
-                }
+                link
             });
 
             const complete = await prisma.rental.findUnique({
@@ -488,57 +475,35 @@ function transitionRoute(targetStatus) {
             // Notify whoever did not press the button.
             const isOwnerActing = role === 'owner';
             const recipientId = isOwnerActing ? rental.renterId : rental.item.userId;
-            const recipient = isOwnerActing ? rental.renter : rental.item.user;
             const link = `/pages/rental-requests.html?role=${isOwnerActing ? 'renter' : 'owner'}&rental=rental-${rental.id}`;
 
             const notificationByStatus = {
                 approved: {
                     type: 'rental_accepted',
-                    title: `Запит на «${rental.item.title}» підтверджено`,
-                    email: mail.templates.rentalDecision({
-                        renterName: recipient.name,
-                        itemTitle: rental.item.title,
-                        accepted: true,
-                        ownerResponse: req.body?.response,
-                        url: notifications.absoluteUrl(link)
-                    })
+                    title: `Запит на «${rental.item.title}» підтверджено`
                 },
                 declined: {
                     type: 'rental_rejected',
-                    title: `Запит на «${rental.item.title}» відхилено`,
-                    email: mail.templates.rentalDecision({
-                        renterName: recipient.name,
-                        itemTitle: rental.item.title,
-                        accepted: false,
-                        ownerResponse: req.body?.response,
-                        url: notifications.absoluteUrl(link)
-                    })
+                    title: `Запит на «${rental.item.title}» відхилено`
                 },
                 cancelled: {
                     type: 'rental_cancelled',
-                    title: `Запит на «${rental.item.title}» скасовано`,
-                    email: mail.templates.rentalCancelled({
-                        recipientName: recipient.name,
-                        itemTitle: rental.item.title,
-                        url: notifications.absoluteUrl(link)
-                    })
+                    title: `Запит на «${rental.item.title}» скасовано`
                 },
                 completed: {
                     type: 'rental_completed',
-                    title: `Оренду «${rental.item.title}» завершено`,
-                    email: null
+                    title: `Оренду «${rental.item.title}» завершено`
                 }
             };
 
             const payload = notificationByStatus[targetStatus];
             if (payload) {
-                await notifications.notifyAndEmail({
+                await notifications.notify({
                     userId: recipientId,
                     type: payload.type,
                     title: payload.title,
                     body: req.body?.response ?? null,
-                    link,
-                    email: payload.email ? { to: recipient.email, ...payload.email } : undefined
+                    link
                 });
             }
 

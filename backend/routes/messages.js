@@ -116,7 +116,9 @@ router.post('/', async (req, res) => {
                 type: 'message_received',
                 title: `Нове повідомлення від ${sender?.name || 'користувача'}`,
                 body: body.slice(0, 140),
-                link: `/pages/messages.html?user=user-${senderId}${itemId ? `&itemId=prod-${itemId}` : ''}`
+                // `item`, not `itemId` — this must match the parameter the
+                // chat page reads, or the notification opens a blank thread.
+                link: `/pages/messages.html?user=user-${senderId}${itemId ? `&item=prod-${itemId}` : ''}`
             }))
             .catch(() => {});
 

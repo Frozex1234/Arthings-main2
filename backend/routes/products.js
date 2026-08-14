@@ -15,7 +15,7 @@ const geocoding = require('../services/geocoding');
 const storage = require('../services/storage');
 const { validate } = require('../middleware/validate');
 const { limiters } = require('../middleware/security');
-const { requireAuth, requireVerifiedEmail } = require('../middleware/auth');
+const { requireAuth } = require('../middleware/auth');
 const schemas = require('../validators/listings');
 
 const router = express.Router();
@@ -167,7 +167,6 @@ router.get('/:id/availability', validate({ params: schemas.idParam }), async (re
 router.post(
     '/',
     requireAuth,
-    requireVerifiedEmail,
     limiters.write,
     storage.uploader.array('images', 10),
     validate({ body: schemas.create }),
@@ -241,7 +240,6 @@ router.post(
 router.put(
     '/:id',
     requireAuth,
-    requireVerifiedEmail,
     storage.uploader.array('images', 10),
     validate({ params: schemas.idParam, body: schemas.update }),
     async (req, res) => {
