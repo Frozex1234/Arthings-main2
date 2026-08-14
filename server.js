@@ -175,7 +175,6 @@ app.get('/api/health', async (req, res) => {
         res.json({
             status: 'healthy',
             database: 'connected',
-            mail: config.mail.isConfigured ? 'configured' : 'console-fallback',
             storage: config.storage.driver,
             timestamp: new Date().toISOString()
         });
@@ -262,7 +261,6 @@ if (require.main === module) {
     ║   http://localhost:${String(config.port).padEnd(39)}║
     ║   env:     ${config.nodeEnv.padEnd(47)}║
     ║   storage: ${config.storage.driver.padEnd(47)}║
-    ║   mail:    ${(config.mail.isConfigured ? 'SMTP' : 'console fallback').padEnd(47)}║
     ╚═══════════════════════════════════════════════════════════╝
         `);
     });
