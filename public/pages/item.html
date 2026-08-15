@@ -15,81 +15,10 @@
 
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <a href="/" class="navbar-brand">
-                <img src="/assets/images/logo.png" alt="Arthings" class="navbar-logo">
-                <span class="navbar-title">Arthings</span>
-            </a>
-
-            <div class="navbar-nav">
-                <a href="/" class="nav-link" data-i18n="nav.home">Home</a>
-                <a href="/pages/map.html" class="nav-link" data-i18n="nav.map">Map</a>
-                <a href="/pages/about.html" class="nav-link" data-i18n="nav.about">About</a>
-                <a href="/pages/contact.html" class="nav-link" data-i18n="nav.contact">Contact</a>
-            </div>
-
-            <div class="navbar-actions">
-                <div class="lang-switcher">
-                    <button class="lang-btn active" data-lang="en">EN</button>
-                    <button class="lang-btn" data-lang="uk">UK</button>
-                </div>
-
-                <!-- Auth Links (when logged out) -->
-                <div id="auth-links">
-                    <a href="/pages/login.html" class="btn btn-ghost" data-i18n="nav.login">Log In</a>
-                    <a href="/pages/register.html" class="btn btn-primary" data-i18n="nav.register">Sign Up</a>
-                </div>
-
-                <!-- User Links (when logged in) -->
-                <div id="user-links" class="hidden">
-                    <a href="/pages/add-item.html" class="btn btn-primary" data-i18n="nav.addItem">Add Item</a>
-                    <div class="user-dropdown">
-                        <button class="btn btn-ghost user-menu-btn">
-                            <span id="user-name">User</span>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
-                        <div class="dropdown-menu">
-                            <a href="/pages/profile.html" data-i18n="nav.profile">Profile</a>
-                            <a href="/pages/my-listings.html" data-i18n="nav.myListings">My Listings</a>
-                            <a href="/pages/favorites.html" data-i18n="nav.favorites">Favorites</a>
-                            <hr>
-                            <a href="#" class="logout-btn" data-i18n="nav.logout">Log Out</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <button class="mobile-menu-btn" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
+    
 
     <!-- Mobile Navigation -->
-    <div class="mobile-nav">
-        <a href="/" class="mobile-nav-link" data-i18n="nav.home">Home</a>
-        <a href="/pages/map.html" class="mobile-nav-link" data-i18n="nav.map">Map</a>
-        <a href="/pages/about.html" class="mobile-nav-link" data-i18n="nav.about">About</a>
-        <a href="/pages/contact.html" class="mobile-nav-link" data-i18n="nav.contact">Contact</a>
-        <hr>
-        <div id="mobile-auth-links">
-            <a href="/pages/login.html" class="mobile-nav-link" data-i18n="nav.login">Log In</a>
-            <a href="/pages/register.html" class="mobile-nav-link" data-i18n="nav.register">Sign Up</a>
-        </div>
-        <div id="mobile-user-links" class="hidden">
-            <a href="/pages/add-item.html" class="mobile-nav-link" data-i18n="nav.addItem">Add Item</a>
-            <a href="/pages/profile.html" class="mobile-nav-link" data-i18n="nav.profile">Profile</a>
-            <a href="/pages/my-listings.html" class="mobile-nav-link" data-i18n="nav.myListings">My Listings</a>
-            <a href="/pages/favorites.html" class="mobile-nav-link" data-i18n="nav.favorites">Favorites</a>
-            <a href="#" class="mobile-nav-link logout-btn" data-i18n="nav.logout">Log Out</a>
-        </div>
-    </div>
+    
 
     <!-- Product Detail -->
     <section class="product-detail">
@@ -134,6 +63,7 @@
     <script src="/components/legal-modal.js"></script>
     <script src="/components/cookie-banner.js"></script>
     <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/navbar.js"></script>
     <script src="/assets/js/main.js"></script>
     <script>
         let product = null;

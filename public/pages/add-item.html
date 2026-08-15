@@ -15,81 +15,10 @@
 
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <a href="/" class="navbar-brand">
-                <img src="/assets/images/logo.png" alt="Arthings" class="navbar-logo">
-                <span class="navbar-title">Arthings</span>
-            </a>
-
-            <div class="navbar-nav">
-                <a href="/" class="nav-link" data-i18n="nav.home">Home</a>
-                <a href="/pages/map.html" class="nav-link" data-i18n="nav.map">Map</a>
-                <a href="/pages/about.html" class="nav-link" data-i18n="nav.about">About</a>
-                <a href="/pages/contact.html" class="nav-link" data-i18n="nav.contact">Contact</a>
-            </div>
-
-            <div class="navbar-actions">
-                <div class="lang-switcher">
-                    <button class="lang-btn active" data-lang="en">EN</button>
-                    <button class="lang-btn" data-lang="uk">UK</button>
-                </div>
-
-                <!-- Auth Links (when logged out) -->
-                <div id="auth-links">
-                    <a href="/pages/login.html" class="btn btn-ghost" data-i18n="nav.login">Log In</a>
-                    <a href="/pages/register.html" class="btn btn-primary" data-i18n="nav.register">Sign Up</a>
-                </div>
-
-                <!-- User Links (when logged in) -->
-                <div id="user-links" class="hidden">
-                    <a href="/pages/add-item.html" class="btn btn-primary" data-i18n="nav.addItem">Add Item</a>
-                    <div class="user-dropdown">
-                        <button class="btn btn-ghost user-menu-btn">
-                            <span id="user-name">User</span>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
-                        <div class="dropdown-menu">
-                            <a href="/pages/profile.html" data-i18n="nav.profile">Profile</a>
-                            <a href="/pages/my-listings.html" data-i18n="nav.myListings">My Listings</a>
-                            <a href="/pages/favorites.html" data-i18n="nav.favorites">Favorites</a>
-                            <hr>
-                            <a href="#" class="logout-btn" data-i18n="nav.logout">Log Out</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <button class="mobile-menu-btn" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
+    
 
     <!-- Mobile Navigation -->
-    <div class="mobile-nav">
-        <a href="/" class="mobile-nav-link" data-i18n="nav.home">Home</a>
-        <a href="/pages/map.html" class="mobile-nav-link" data-i18n="nav.map">Map</a>
-        <a href="/pages/about.html" class="mobile-nav-link" data-i18n="nav.about">About</a>
-        <a href="/pages/contact.html" class="mobile-nav-link" data-i18n="nav.contact">Contact</a>
-        <hr>
-        <div id="mobile-auth-links">
-            <a href="/pages/login.html" class="mobile-nav-link" data-i18n="nav.login">Log In</a>
-            <a href="/pages/register.html" class="mobile-nav-link" data-i18n="nav.register">Sign Up</a>
-        </div>
-        <div id="mobile-user-links" class="hidden">
-            <a href="/pages/add-item.html" class="mobile-nav-link" data-i18n="nav.addItem">Add Item</a>
-            <a href="/pages/profile.html" class="mobile-nav-link" data-i18n="nav.profile">Profile</a>
-            <a href="/pages/my-listings.html" class="mobile-nav-link" data-i18n="nav.myListings">My Listings</a>
-            <a href="/pages/favorites.html" class="mobile-nav-link" data-i18n="nav.favorites">Favorites</a>
-            <a href="#" class="mobile-nav-link logout-btn" data-i18n="nav.logout">Log Out</a>
-        </div>
-    </div>
+    
 
     <!-- Page Header -->
     <div class="page-header">
@@ -104,6 +33,20 @@
         <div class="container" style="max-width: 700px;">
             <div class="card" style="padding: 2.5rem;">
                 <form id="add-item-form">
+                    <div class="form-group">
+                        <label class="form-label">Що ви здаєте?</label>
+                        <div class="type-toggle" id="type-toggle">
+                            <button type="button" class="type-option is-active" data-type="item">
+                                <span class="type-icon">📦</span>
+                                <span>Річ</span>
+                            </button>
+                            <button type="button" class="type-option" data-type="housing">
+                                <span class="type-icon">🏠</span>
+                                <span>Житло</span>
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label class="form-label" data-i18n="addItem.name">Item Name</label>
                         <input type="text" id="title" class="form-input" data-i18n-placeholder="addItem.namePlaceholder"
@@ -126,34 +69,114 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" data-i18n="addItem.price">Price per Day (₴)</label>
-                            <input type="number" id="price" class="form-input" min="1" step="1" placeholder="25"
-                                required>
+                            <label class="form-label" for="price">Ціна, ₴</label>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <input type="number" id="price" class="form-input" min="1" step="1" placeholder="25"
+                                    style="flex: 1;" required>
+                                <select id="price-unit" class="form-input form-select" style="width: 42%;">
+                                    <option value="day">за день</option>
+                                    <option value="week">за тиждень</option>
+                                    <option value="month">за місяць</option>
+                                    <option value="hour">за годину</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label" data-i18n="addItem.city">City</label>
-                        <select id="city" class="form-input form-select" required>
-                            <option value="" data-i18n="addItem.selectCity">Select your city</option>
-                        </select>
-                    </div>
+                    <!-- Address. These fields are what the map is built on:
+                         the server geocodes them once on save and stores the
+                         coordinates, so a listing without a street never gets
+                         a precise pin. -->
+                    <fieldset class="address-block">
+                        <legend>Адреса</legend>
+                        <p class="address-hint">
+                            Почніть вводити адресу — ми підкажемо варіанти й самі заповнимо поля.
+                            Що точніша адреса, то точніше оголошення стане на карті.
+                        </p>
+
+                        <div class="form-group" style="position: relative;">
+                            <label class="form-label" for="address-search">Пошук адреси</label>
+                            <input type="text" id="address-search" class="form-input" autocomplete="off"
+                                placeholder="Напр., Київ, вулиця Хрещатик 1">
+                            <div id="address-suggestions" class="address-suggestions" hidden></div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label class="form-label" for="region">Область</label>
+                                <input type="text" id="region" class="form-input" maxlength="120" placeholder="Київська область">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="district">Район</label>
+                                <input type="text" id="district" class="form-input" maxlength="120" placeholder="Не обов'язково">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="city">Місто</label>
+                                <input type="text" id="city" class="form-input" maxlength="100" placeholder="Київ">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="village">Село / селище</label>
+                                <input type="text" id="village" class="form-input" maxlength="120" placeholder="Якщо це не місто">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="street">Вулиця <span id="street-required" class="hidden">*</span></label>
+                                <input type="text" id="street" class="form-input" maxlength="160" placeholder="вулиця Хрещатик">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="house-number">Будинок</label>
+                                <input type="text" id="house-number" class="form-input" maxlength="30" placeholder="1А">
+                            </div>
+                        </div>
+
+                        <p class="address-note">
+                            Вкажіть місто <strong>або</strong> село — хоча б одне з двох обов'язкове.
+                        </p>
+                    </fieldset>
 
                     <div id="housing-fields" class="housing-fields hidden">
                         <h3>Деталі житла</h3>
                         <p>Ці параметри допоможуть орендарям швидше знайти ваше оголошення.</p>
+
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div class="form-group"><label class="form-label" for="housing-type">Тип житла</label><select id="housing-type" class="form-input form-select"><option value="">Не вказано</option><option value="apartment">Квартира</option><option value="room">Кімната</option><option value="house">Будинок</option><option value="studio">Студія</option></select></div>
-                            <div class="form-group"><label class="form-label" for="address">Адреса / район</label><input id="address" class="form-input" maxlength="255" placeholder="Напр., Шевченківський район"></div>
+                            <div class="form-group">
+                                <label class="form-label" for="housing-category">Категорія житла</label>
+                                <select id="housing-category" class="form-input form-select">
+                                    <option value="">Не вказано</option>
+                                    <option value="apartment">Квартира</option>
+                                    <option value="house">Будинок</option>
+                                    <option value="room">Кімната</option>
+                                    <option value="hostel">Хостел</option>
+                                    <option value="commercial">Комерційна нерухомість</option>
+                                    <option value="garage">Гараж</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="rental-period">Термін оренди</label>
+                                <select id="rental-period" class="form-input form-select">
+                                    <option value="">Не вказано</option>
+                                    <option value="daily">Подобово</option>
+                                    <option value="weekly">Потижнево</option>
+                                    <option value="monthly">Помісячно</option>
+                                    <option value="short_term">Короткостроково</option>
+                                    <option value="long_term">Довгостроково</option>
+                                </select>
+                            </div>
                             <div class="form-group"><label class="form-label" for="rooms">Кількість кімнат</label><input id="rooms" type="number" min="0" max="50" class="form-input" placeholder="1"></div>
                             <div class="form-group"><label class="form-label" for="area">Площа, м²</label><input id="area" type="number" min="0" step="0.1" class="form-input" placeholder="45"></div>
                             <div class="form-group"><label class="form-label" for="floor">Поверх</label><input id="floor" type="number" min="0" max="200" class="form-input" placeholder="4"></div>
                             <div class="form-group"><label class="form-label" for="total-floors">Поверхів у будинку</label><input id="total-floors" type="number" min="1" max="200" class="form-input" placeholder="9"></div>
+                            <div class="form-group"><label class="form-label" for="max-guests">Максимум гостей</label><input id="max-guests" type="number" min="1" max="100" class="form-input" placeholder="4"></div>
+                            <div class="form-group"><label class="form-label" for="housing-type">Тип (додатково)</label><input id="housing-type" class="form-input" maxlength="30" placeholder="Напр., студія"></div>
                         </div>
+
                         <div class="housing-options">
                             <label class="checkbox-label"><input id="is-furnished" type="checkbox"><span>Мебльоване</span></label>
                             <label class="checkbox-label"><input id="pets-allowed" type="checkbox"><span>Можна з тваринами</span></label>
                             <label class="checkbox-label student-option"><input id="students-allowed" type="checkbox"><span>Можна студентам</span></label>
+                            <label class="checkbox-label"><input id="smoking-allowed" type="checkbox"><span>Можна палити</span></label>
+                            <label class="checkbox-label"><input id="has-internet" type="checkbox"><span>Інтернет</span></label>
+                            <label class="checkbox-label"><input id="has-parking" type="checkbox"><span>Паркінг</span></label>
+                            <label class="checkbox-label"><input id="utilities-included" type="checkbox"><span>Комуналка включена</span></label>
                         </div>
                     </div>
 
@@ -196,9 +219,16 @@
     <script src="/components/legal-modal.js"></script>
     <script src="/components/cookie-banner.js"></script>
     <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/navbar.js"></script>
     <script src="/assets/js/main.js"></script>
+    <script src="/assets/js/arthings-map.js"></script>
     <script>
         let selectedFiles = [];
+        /** Blocks a second concurrent submission — see submitListing(). */
+        let isSubmitting = false;
+        /** 'item' | 'housing', driven by the toggle at the top of the form. */
+        let selectedType = new URLSearchParams(location.search).get('type') === 'housing'
+            ? 'housing' : 'item';
 
         document.addEventListener('DOMContentLoaded', async () => {
             // Check authentication
@@ -221,26 +251,35 @@
                     option.textContent = `${cat.icon} ${i18n.getLanguage() === 'uk' ? cat.nameUk : cat.name}`;
                     categorySelect.appendChild(option);
                 });
-
-                // Populate cities
-                const citySelect = document.getElementById('city');
-                (data.cities || []).forEach(city => {
-                    const option = document.createElement('option');
-                    option.value = city;
-                    option.textContent = city;
-                    citySelect.appendChild(option);
-                });
-
-                // Pre-select user's city if set
-                if (user.city) {
-                    citySelect.value = user.city;
-                }
             } catch (error) {
                 console.error('Failed to load config:', error);
             }
 
+            // City is a free-text field now — every Ukrainian settlement is
+            // reachable through the address autocomplete, not a fixed list.
+            if (user.city) document.getElementById('city').value = user.city;
+
+            applyListingType(selectedType);
+
+            document.getElementById('type-toggle').addEventListener('click', event => {
+                const option = event.target.closest('[data-type]');
+                if (option) applyListingType(option.dataset.type);
+            });
+
+            // Once the user picks a price unit themselves, stop overriding it
+            // when they switch listing type.
+            document.getElementById('price-unit').addEventListener('change', event => {
+                event.target.dataset.touched = 'true';
+            });
+
+            // Address autocomplete, proxied through our server-side geocoder.
+            attachMapAutocomplete({
+                input: document.getElementById('address-search'),
+                resultsContainer: document.getElementById('address-suggestions'),
+                onSelect: fillAddressFrom
+            });
+
             // File upload handling
-            document.getElementById('category').addEventListener('change', toggleHousingFields);
             const fileInput = document.getElementById('images');
             const uploadZone = document.getElementById('file-upload-zone');
 
@@ -272,28 +311,36 @@
             document.getElementById('add-item-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
 
-                // Check legal consents
+                // Guard before anything async: the consent checks below await,
+                // and until this returns the submit button is still live.
+                if (isSubmitting) return;
+
                 const needsTerms = await legalModal.checkConsentRequired('terms-of-performance');
                 const needsOffer = await legalModal.checkConsentRequired('public-offer');
 
+                // Consent modals call submitListing() directly rather than
+                // re-dispatching a submit event. Re-dispatching ran the whole
+                // handler again — re-checking consents and re-entering the
+                // submit path — which is how listings were being created twice.
+                // (`new Event('submit')` is also not cancelable, so the
+                // preventDefault above would not have applied on that pass.)
                 if (needsTerms) {
                     legalModal.open({
                         type: 'terms-of-performance',
                         title: i18n.t('legal.termsOfPerformance'),
                         showAccept: true,
                         onAccept: () => {
-                            // If also needs offer, show that next, otherwise submit
                             if (needsOffer) {
                                 setTimeout(() => {
                                     legalModal.open({
                                         type: 'public-offer',
                                         title: i18n.t('legal.publicOffer'),
                                         showAccept: true,
-                                        onAccept: () => document.getElementById('add-item-form').dispatchEvent(new Event('submit'))
+                                        onAccept: submitListing
                                     });
                                 }, 300);
                             } else {
-                                document.getElementById('add-item-form').dispatchEvent(new Event('submit'));
+                                submitListing();
                             }
                         }
                     });
@@ -305,68 +352,126 @@
                         type: 'public-offer',
                         title: i18n.t('legal.publicOffer'),
                         showAccept: true,
-                        onAccept: () => document.getElementById('add-item-form').dispatchEvent(new Event('submit'))
+                        onAccept: submitListing
                     });
                     return;
                 }
 
-                const title = document.getElementById('title').value.trim();
-                const description = document.getElementById('description').value.trim();
-                const category = document.getElementById('category').value;
-                const price = document.getElementById('price').value;
-                const city = document.getElementById('city').value;
-
-                // Validation
-                if (!title || !description || !category || !price || !city) {
-                    showToast('error', 'Please fill in all required fields');
-                    return;
-                }
-
-                try {
-                    const submitBtn = e.target.querySelector('button[type="submit"]');
-                    submitBtn.disabled = true;
-                    submitBtn.textContent = i18n.t('common.loading');
-
-                    // Create FormData for file upload
-                    const formData = new FormData();
-                    formData.append('title', title);
-                    formData.append('description', description);
-                    formData.append('category', category);
-                    formData.append('price', price);
-                    formData.append('city', city);
-                    if (category === 'housing') {
-                        formData.append('housingType', document.getElementById('housing-type').value);
-                        formData.append('address', document.getElementById('address').value.trim());
-                        formData.append('rooms', document.getElementById('rooms').value);
-                        formData.append('area', document.getElementById('area').value);
-                        formData.append('floor', document.getElementById('floor').value);
-                        formData.append('totalFloors', document.getElementById('total-floors').value);
-                        formData.append('isFurnished', document.getElementById('is-furnished').checked);
-                        formData.append('petsAllowed', document.getElementById('pets-allowed').checked);
-                        formData.append('studentsAllowed', document.getElementById('students-allowed').checked);
-                    }
-
-                    selectedFiles.forEach(file => {
-                        formData.append('images', file);
-                    });
-
-                    const data = await api.post('/api/products', formData, true);
-
-                    showToast('success', i18n.t('toast.itemCreated'));
-
-                    // Redirect to the new product
-                    setTimeout(() => {
-                        window.location.href = `/pages/item.html?id=${data.product.id}`;
-                    }, 1000);
-
-                } catch (error) {
-                    showToast('error', error.message);
-                    const submitBtn = e.target.querySelector('button[type="submit"]');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = i18n.t('addItem.submit');
-                }
+                submitListing();
             });
         });
+
+        /** Appends a value only when the user actually provided one, so blank
+         *  optional fields are omitted rather than sent as empty strings. */
+        function appendIfSet(formData, key, value) {
+            if (value === undefined || value === null) return;
+            const trimmed = typeof value === 'string' ? value.trim() : value;
+            if (trimmed === '') return;
+            formData.append(key, trimmed);
+        }
+
+        const fieldValue = id => document.getElementById(id)?.value ?? '';
+        const fieldChecked = id => Boolean(document.getElementById(id)?.checked);
+
+        /**
+         * Validates and posts the listing.
+         *
+         * Single entry point for submission — the form handler and both
+         * consent modals all route through here, and `isSubmitting` makes a
+         * second concurrent call a no-op.
+         */
+        async function submitListing() {
+            if (isSubmitting) return;
+
+            const form = document.getElementById('add-item-form');
+            const submitBtn = form.querySelector('button[type="submit"]');
+
+            const title = fieldValue('title').trim();
+            const description = fieldValue('description').trim();
+            const category = fieldValue('category');
+            const price = fieldValue('price');
+            const city = fieldValue('city').trim();
+            const village = fieldValue('village').trim();
+            const street = fieldValue('street').trim();
+
+            if (!title || !description || !category || !price) {
+                showToast('error', 'Заповніть назву, опис, категорію та ціну');
+                return;
+            }
+            if (!city && !village) {
+                showToast('error', 'Вкажіть місто або село — без цього оголошення не потрапить на карту');
+                return;
+            }
+            if (selectedType === 'housing' && !street) {
+                showToast('error', 'Для житла вкажіть вулицю');
+                return;
+            }
+
+            // Claim the lock and lock the button before the first await.
+            isSubmitting = true;
+            submitBtn.disabled = true;
+            submitBtn.textContent = i18n.t('common.loading');
+
+            try {
+                const formData = new FormData();
+                formData.append('listingType', selectedType);
+                formData.append('title', title);
+                formData.append('description', description);
+                formData.append('category', category);
+                formData.append('price', price);
+                formData.append('priceUnit', fieldValue('price-unit') || 'day');
+
+                // Address — the server geocodes these into map coordinates.
+                formData.append('country', 'Ukraine');
+                appendIfSet(formData, 'region', fieldValue('region'));
+                appendIfSet(formData, 'district', fieldValue('district'));
+                appendIfSet(formData, 'city', city);
+                appendIfSet(formData, 'village', village);
+                appendIfSet(formData, 'street', street);
+                appendIfSet(formData, 'houseNumber', fieldValue('house-number'));
+
+                if (selectedType === 'housing') {
+                    appendIfSet(formData, 'housingCategory', fieldValue('housing-category'));
+                    appendIfSet(formData, 'rentalPeriod', fieldValue('rental-period'));
+                    appendIfSet(formData, 'housingType', fieldValue('housing-type'));
+                    appendIfSet(formData, 'rooms', fieldValue('rooms'));
+                    appendIfSet(formData, 'area', fieldValue('area'));
+                    appendIfSet(formData, 'floor', fieldValue('floor'));
+                    appendIfSet(formData, 'totalFloors', fieldValue('total-floors'));
+                    appendIfSet(formData, 'maxGuests', fieldValue('max-guests'));
+                    formData.append('isFurnished', fieldChecked('is-furnished'));
+                    formData.append('petsAllowed', fieldChecked('pets-allowed'));
+                    formData.append('smokingAllowed', fieldChecked('smoking-allowed'));
+                    formData.append('hasInternet', fieldChecked('has-internet'));
+                    formData.append('hasParking', fieldChecked('has-parking'));
+                    formData.append('utilitiesIncluded', fieldChecked('utilities-included'));
+                }
+                formData.append('studentsAllowed', fieldChecked('students-allowed'));
+
+                selectedFiles.forEach(file => formData.append('images', file));
+
+                const data = await api.post('/api/products', formData, true);
+
+                if (data.geocoded === false) {
+                    showToast('success', 'Оголошення створено, але адресу не вдалося знайти на карті — перевірте її в редагуванні');
+                } else {
+                    showToast('success', i18n.t('toast.itemCreated'));
+                }
+
+                // Deliberately not releasing the lock: the page is navigating
+                // away, and re-enabling would allow one more submission.
+                setTimeout(() => {
+                    window.location.href = `/pages/item.html?id=${data.product.id}`;
+                }, 1000);
+            } catch (error) {
+                showToast('error', error.fields
+                    ? Object.values(error.fields).join('. ')
+                    : error.message);
+                isSubmitting = false;
+                submitBtn.disabled = false;
+                submitBtn.textContent = i18n.t('addItem.submit');
+            }
+        }
 
         function handleFileSelect(e) {
             const files = Array.from(e.target.files);
@@ -404,8 +509,49 @@
             renderImagePreview();
         }
 
-        function toggleHousingFields() {
-            document.getElementById('housing-fields').classList.toggle('hidden', document.getElementById('category').value !== 'housing');
+        /**
+         * Switches the form between an item and a housing listing: reveals the
+         * housing fieldset and makes street required, since housing without a
+         * street cannot be placed precisely on the map.
+         */
+        function applyListingType(type) {
+            selectedType = type === 'housing' ? 'housing' : 'item';
+
+            document.querySelectorAll('#type-toggle .type-option').forEach(option => {
+                option.classList.toggle('is-active', option.dataset.type === selectedType);
+            });
+
+            const isHousing = selectedType === 'housing';
+            document.getElementById('housing-fields').classList.toggle('hidden', !isHousing);
+            document.getElementById('street-required').classList.toggle('hidden', !isHousing);
+            document.getElementById('street').required = isHousing;
+
+            // Housing is normally advertised per month; items per day.
+            const unit = document.getElementById('price-unit');
+            if (unit && !unit.dataset.touched) unit.value = isHousing ? 'month' : 'day';
+        }
+
+        /** Fills the structured address fields from a geocoder suggestion. */
+        function fillAddressFrom(suggestion) {
+            const address = suggestion.address || {};
+            const set = (id, value) => {
+                const el = document.getElementById(id);
+                if (el && value) el.value = value;
+            };
+
+            set('region', address.region);
+            set('district', address.district);
+            set('city', address.city);
+            set('village', address.village);
+            set('street', address.street);
+            set('house-number', address.houseNumber);
+
+            // A suggestion that resolves to a settlement rather than a street
+            // leaves the street blank; say so rather than letting the user
+            // discover it at submit time.
+            if (selectedType === 'housing' && !address.street) {
+                showToast('warning', 'Оберіть варіант із вулицею або допишіть її вручну');
+            }
         }
     </script>
 
@@ -451,6 +597,46 @@
         }
 
         .housing-fields { padding: 1.25rem; margin-bottom: 1.5rem; border: 1px solid var(--color-gray-200); border-radius: var(--radius-lg); background: var(--color-gray-50); }
+
+        /* Listing type toggle */
+        .type-toggle { display: flex; gap: 0.75rem; }
+        .type-option {
+            flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
+            padding: 1rem; font-family: inherit; font-size: 0.9rem; font-weight: 600;
+            color: var(--color-gray-700); background: #fff; cursor: pointer;
+            border: 2px solid var(--color-gray-200); border-radius: var(--radius-lg);
+            transition: all .15s;
+        }
+        .type-option:hover { border-color: var(--color-primary); }
+        .type-option.is-active { border-color: var(--color-primary); background: #f0fdfc; color: #00817f; }
+        .type-icon { font-size: 1.6rem; }
+
+        /* Address block */
+        .address-block {
+            padding: 1.25rem; margin-bottom: 1.5rem; border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius-lg); background: var(--color-gray-50);
+        }
+        .address-block legend { padding: 0 0.5rem; font-weight: 700; color: var(--color-gray-800); }
+        .address-hint, .address-note { font-size: 0.8rem; color: var(--color-gray-600); margin: 0 0 1rem; line-height: 1.5; }
+        .address-note { margin: 0.75rem 0 0; }
+
+        .address-suggestions {
+            position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 50;
+            background: #fff; border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius-md); box-shadow: 0 12px 28px rgba(0,0,0,.12);
+            max-height: 280px; overflow-y: auto;
+        }
+        .address-suggestions .map-suggestion {
+            display: block; width: 100%; padding: 0.6rem 0.85rem; text-align: left;
+            background: none; border: none; border-bottom: 1px solid var(--color-gray-100);
+            cursor: pointer; font-family: inherit;
+        }
+        .address-suggestions .map-suggestion:last-child { border-bottom: none; }
+        .address-suggestions .map-suggestion:hover,
+        .address-suggestions .map-suggestion.is-active { background: #f0fdfc; }
+        .address-suggestions .map-suggestion-title { display: block; font-size: 0.875rem; font-weight: 600; color: var(--color-gray-900); }
+        .address-suggestions .map-suggestion-sub { display: block; font-size: 0.75rem; color: var(--color-gray-600); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .address-suggestions .map-suggestion--empty { color: var(--color-gray-500); font-size: 0.8rem; cursor: default; }
         .housing-fields h3 { margin: 0; }
         .housing-fields p { margin: .35rem 0 1.25rem; color: var(--color-gray-600); font-size: .9rem; }
         .housing-options { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; }

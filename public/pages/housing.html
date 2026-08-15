@@ -189,74 +189,9 @@
 
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <a href="/" class="navbar-brand">
-                <img src="/assets/images/logo.png" alt="Arthings" class="navbar-logo">
-                <span class="navbar-title">Arthings</span>
-            </a>
+    
 
-            <div class="navbar-nav">
-                <a href="/" class="nav-link">Оренда речей</a>
-                <a href="/pages/housing.html" class="nav-link active">Оренда житла</a>
-                <a href="/pages/map.html?type=housing" class="nav-link">Карта</a>
-                <a href="/pages/about.html" class="nav-link">Про нас</a>
-            </div>
-
-            <div class="navbar-actions">
-                <div class="lang-switcher">
-                    <button class="lang-btn active" data-lang="en">EN</button>
-                    <button class="lang-btn" data-lang="uk">UK</button>
-                </div>
-
-                <div id="auth-links">
-                    <a href="/pages/login.html" class="btn btn-ghost">Увійти</a>
-                    <a href="/pages/register.html" class="btn btn-primary">Реєстрація</a>
-                </div>
-
-                <div id="user-links" class="hidden">
-                    <a href="/pages/add-item.html?type=housing" class="btn btn-primary">Здати житло</a>
-                    <div class="user-dropdown">
-                        <button class="btn btn-ghost user-menu-btn">
-                            <span id="user-name">User</span>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
-                        <div class="dropdown-menu">
-                            <a href="/pages/profile.html">Профіль</a>
-                            <a href="/pages/my-listings.html">Мої оголошення</a>
-                            <a href="/pages/messages.html">Повідомлення</a>
-                            <a href="/pages/rental-requests.html">Запити</a>
-                            <a href="/pages/favorites.html">Обране</a>
-                            <hr>
-                            <a href="#" class="logout-btn">Вийти</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <button class="mobile-menu-btn" aria-label="Toggle menu">
-                <span></span><span></span><span></span>
-            </button>
-        </div>
-    </nav>
-
-    <div class="mobile-nav">
-        <a href="/" class="mobile-nav-link">Оренда речей</a>
-        <a href="/pages/housing.html" class="mobile-nav-link">Оренда житла</a>
-        <a href="/pages/map.html?type=housing" class="mobile-nav-link">Карта</a>
-        <hr>
-        <div id="mobile-auth-links">
-            <a href="/pages/login.html" class="mobile-nav-link">Увійти</a>
-            <a href="/pages/register.html" class="mobile-nav-link">Реєстрація</a>
-        </div>
-        <div id="mobile-user-links" class="hidden">
-            <a href="/pages/profile.html" class="mobile-nav-link">Профіль</a>
-            <a href="/pages/my-listings.html" class="mobile-nav-link">Мої оголошення</a>
-            <a href="#" class="mobile-nav-link logout-btn">Вийти</a>
-        </div>
-    </div>
+    
 
     <!-- Hero + categories -->
     <section class="housing-hero">
@@ -360,6 +295,7 @@
     <div id="toast-container" class="toast-container"></div>
 
     <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/navbar.js"></script>
     <script src="/assets/js/main.js"></script>
     <script src="/assets/js/arthings-map.js"></script>
     <script>
