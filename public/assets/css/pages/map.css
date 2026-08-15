@@ -4,6 +4,10 @@
 
 .map-page {
     display: flex;
+    /* The navbar is position:fixed and 72px tall, so it sits on top of the
+       document flow. Without this offset the sidebar header — the search
+       field — is hidden underneath it. */
+    margin-top: 72px;
     height: calc(100vh - 72px);
     overflow: hidden;
 }

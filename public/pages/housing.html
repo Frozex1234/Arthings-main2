@@ -14,7 +14,10 @@
     <style>
         .housing-hero {
             background: linear-gradient(135deg, #f0fdfc 0%, #f5f3ff 100%);
-            padding: 2.5rem 0 2rem;
+            /* Clears the 72px position:fixed navbar. Padding rather than
+               margin so the gradient still fills the strip behind the
+               translucent header instead of leaving a white band. */
+            padding: calc(72px + 2.5rem) 0 2rem;
         }
 
         .housing-hero h1 {

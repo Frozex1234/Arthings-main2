@@ -61,6 +61,9 @@
         }
     </script>
     <style>
+      /* .section's 64px padding is less than the 72px fixed navbar, so the
+         heading would sit under it. */
+      main.section { padding-top: calc(72px + var(--spacing-8)); }
       .messages-layout { display:grid; grid-template-columns:300px 1fr; min-height:65vh; border:1px solid var(--color-gray-200); border-radius:var(--radius-xl); overflow:hidden; background:white; }
       .conversations { border-right:1px solid var(--color-gray-200); padding:1rem; } .conversations h1 { font-size:1.4rem; margin:.25rem 0 1rem; }
       .conversation { position:relative; display:flex; flex-direction:column; gap:.2rem; width:100%; padding:.8rem; text-align:left; border:0; border-radius:var(--radius-md); background:transparent; cursor:pointer; }.conversation:hover,.conversation.active{background:var(--color-gray-100)} .conversation small,.conversation span,.muted{color:var(--color-gray-600)} .conversation span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.85rem}.conversation b{position:absolute;right:.65rem;top:.7rem;color:var(--color-primary)}
