@@ -309,7 +309,11 @@ p {
 .navbar-nav {
     display: flex;
     align-items: center;
-    gap: var(--spacing-8);
+    /* The links carry their own horizontal padding, so a large gap on top of
+       that pushed six entries past the container width and wrapped them onto
+       a second line inside the fixed-height header. */
+    gap: var(--spacing-1);
+    flex-wrap: nowrap;
 }
 
 .nav-link {
@@ -319,6 +323,9 @@ p {
     padding: var(--spacing-2) var(--spacing-3);
     border-radius: var(--radius-md);
     transition: all var(--transition-fast);
+    /* Never break a label across lines: the header is a fixed 72px tall, so a
+       wrapped link gets clipped rather than shown. */
+    white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -1953,6 +1960,34 @@ p {
     .footer-grid {
         grid-template-columns: 1fr 1fr;
         gap: var(--spacing-8);
+    }
+}
+
+/* Between these widths the six nav entries still fit, but only just — tighten
+   them before anything is forced to wrap. */
+@media (max-width: 1180px) {
+    .nav-link {
+        padding: var(--spacing-2) var(--spacing-2);
+        font-size: 0.82rem;
+    }
+
+    .navbar-actions {
+        gap: var(--spacing-2);
+    }
+}
+
+/* Below this the header genuinely cannot hold six links plus the language
+   switcher, the add button and the account menu, so fall back to the burger
+   rather than letting labels collide. */
+@media (max-width: 1024px) {
+    .navbar-nav,
+    #auth-links,
+    #user-links {
+        display: none !important;
+    }
+
+    .mobile-menu-btn {
+        display: flex;
     }
 }
 
