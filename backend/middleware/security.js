@@ -22,6 +22,18 @@ const securityHeaders = helmet({
         directives: {
             defaultSrc: ["'self'"],
             scriptSrc: ["'self'", "'unsafe-inline'", 'https://unpkg.com'],
+            // Helmet defaults this to 'none', which blocks every inline event
+            // handler attribute — onclick, onchange, onerror — regardless of
+            // 'unsafe-inline' above, because script-src-attr governs them
+            // separately. The pages use 21 such handlers (chat, favourites,
+            // the admin actions, image fallbacks), so the default silently
+            // disabled them.
+            //
+            // This does not meaningfully weaken the policy: script-src already
+            // permits inline scripts, so an attacker able to inject markup
+            // would not need an event attribute. The actual XSS defence here
+            // is escaping every user-supplied value before insertion.
+            scriptSrcAttr: ["'unsafe-inline'"],
             styleSrc: ["'self'", "'unsafe-inline'", 'https://unpkg.com', 'https://fonts.googleapis.com'],
             fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'],
             // Map tiles come from the OSM tile servers; uploads may be served
