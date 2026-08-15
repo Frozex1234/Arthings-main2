@@ -172,9 +172,30 @@ app.get('/api/config', async (req, res) => {
 app.get('/api/health', async (req, res) => {
     try {
         await prisma.$queryRaw`SELECT 1`;
+
+        // `SELECT 1` proves connectivity but says nothing about the schema.
+        // An un-applied migration otherwise surfaces only as a generic 500 on
+        // every listing endpoint, which is slow and confusing to trace — so
+        // check for the columns this release depends on and say so plainly.
+        const columns = await prisma.$queryRaw`
+            SELECT column_name
+            FROM information_schema.columns
+            WHERE table_name = 'items'
+              AND column_name IN ('listing_type', 'latitude', 'longitude')
+        `;
+
+        const missing = ['listing_type', 'latitude', 'longitude'].filter(
+            name => !columns.some(row => row.column_name === name)
+        );
+
         res.json({
-            status: 'healthy',
+            status: missing.length ? 'degraded' : 'healthy',
             database: 'connected',
+            schema: missing.length ? 'migration_pending' : 'ready',
+            ...(missing.length && {
+                missingColumns: missing,
+                hint: 'Run prisma/migrations/202608140001_map_housing_and_rent_requests/migration.sql'
+            }),
             storage: config.storage.driver,
             timestamp: new Date().toISOString()
         });
