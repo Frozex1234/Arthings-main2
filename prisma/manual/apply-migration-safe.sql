@@ -1,9 +1,11 @@
 -- ===========================================================================
 -- Arthings — міграція, БЕЗПЕЧНА ДЛЯ ПОВТОРНОГО ЗАПУСКУ
 -- ===========================================================================
--- Той самий набір змін, що й у
---   prisma/migrations/202608140001_map_housing_and_rent_requests/migration.sql
--- але кожна операція пропускається, якщо об'єкт уже існує.
+-- Об'єднує ОБИДВІ міграції з prisma/migrations (202607260001 + 202608140001)
+-- і робить кожну операцію такою, що пропускається, якщо об'єкт уже існує.
+--
+-- Обидві потрібні тому, що базу цієї гілки створювали через `prisma db push`,
+-- а не міграціями, і першу з них тут ніколи не застосовували.
 --
 -- Навіщо окремий файл: канонічну міграцію застосовує `prisma migrate deploy`,
 -- і вона свідомо падає, якщо щось уже створено — це правильна поведінка для
@@ -22,6 +24,54 @@
 --   curl -s https://arthings-main-5t3e.vercel.app/api/health
 --   має показати "schema": "ready"
 -- ===========================================================================
+
+-- ---------------------------------------------------------------------------
+-- 0. ПЕРЕДУМОВА: поля житла та таблиця чату
+--
+--    Ці зміни колись вносила міграція 202607260001, але у цій базі її
+--    ніколи не застосовували: гілку main2 створювали через `prisma db push`
+--    зі схеми, з якої житло було відкочене. Тому таблиця "items" не має
+--    housing_type / rooms / area, а таблиці "messages" (чат) немає взагалі.
+--
+--    Без цього кроку падає UPDATE у розділі 3, який посилається на
+--    housing_type, і все після нього не виконується.
+-- ---------------------------------------------------------------------------
+ALTER TABLE "items"
+    ADD COLUMN IF NOT EXISTS "address" VARCHAR(255),
+    ADD COLUMN IF NOT EXISTS "housing_type" VARCHAR(30),
+    ADD COLUMN IF NOT EXISTS "rooms" INTEGER,
+    ADD COLUMN IF NOT EXISTS "area" DECIMAL(8,2),
+    ADD COLUMN IF NOT EXISTS "floor" INTEGER,
+    ADD COLUMN IF NOT EXISTS "total_floors" INTEGER,
+    ADD COLUMN IF NOT EXISTS "is_furnished" BOOLEAN,
+    ADD COLUMN IF NOT EXISTS "pets_allowed" BOOLEAN,
+    ADD COLUMN IF NOT EXISTS "students_allowed" BOOLEAN NOT NULL DEFAULT false;
+
+CREATE INDEX IF NOT EXISTS "items_students_allowed_idx" ON "items"("students_allowed");
+
+-- Приватні повідомлення між користувачами (чат).
+CREATE TABLE IF NOT EXISTS "messages" (
+    "id" SERIAL NOT NULL,
+    "sender_id" INTEGER NOT NULL,
+    "recipient_id" INTEGER NOT NULL,
+    "item_id" INTEGER,
+    "body" TEXT NOT NULL,
+    "read_at" TIMESTAMP(3),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "messages_pkey" PRIMARY KEY ("id"),
+    CONSTRAINT "messages_sender_id_fkey" FOREIGN KEY ("sender_id")
+        REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "messages_recipient_id_fkey" FOREIGN KEY ("recipient_id")
+        REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "messages_item_id_fkey" FOREIGN KEY ("item_id")
+        REFERENCES "items"("id") ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS "messages_sender_id_recipient_id_created_at_idx"
+    ON "messages"("sender_id", "recipient_id", "created_at");
+CREATE INDEX IF NOT EXISTS "messages_recipient_id_read_at_idx"
+    ON "messages"("recipient_id", "read_at");
+CREATE INDEX IF NOT EXISTS "messages_item_id_idx" ON "messages"("item_id");
 
 -- ---------------------------------------------------------------------------
 -- 1. Типи (enum)
