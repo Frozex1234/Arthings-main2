@@ -65,6 +65,7 @@
     <script src="/assets/js/i18n.js"></script>
     <script src="/assets/js/navbar.js"></script>
     <script src="/assets/js/main.js"></script>
+    <script src="/assets/js/recently-viewed.js"></script>
     <script>
         let product = null;
         let isFavorite = false;
@@ -85,6 +86,9 @@
             try {
                 const data = await api.get(`/api/products/${productId}`);
                 product = data.product;
+
+                // Feeds the "Ви переглядали" rail on the homepage.
+                recentlyViewed.recordView(product.id);
 
                 // Check if favorited
                 if (currentUser) {

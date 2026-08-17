@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Пошук речей та житла в оренду на Arthings">
+    <title>Пошук - Arthings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
+    <style>
+        .search-bar-section {
+            background: #fff;
+            border-bottom: 1px solid var(--color-gray-200);
+            padding: calc(72px + 1.25rem) 0 1.25rem;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .search-bar input {
+            flex: 1;
+            min-width: 240px;
+            padding: 0.85rem 1.1rem;
+            font-size: 1rem;
+            font-family: inherit;
+            border: 2px solid var(--color-gray-200);
+            border-radius: 12px;
+            outline: none;
+            transition: border-color .15s;
+        }
+
+        .search-bar input:focus { border-color: var(--color-primary); }
+
+        .search-layout {
+            display: grid;
+            grid-template-columns: 268px 1fr;
+            gap: 1.75rem;
+            padding: 1.75rem 0 3rem;
+            align-items: start;
+        }
+
+        .search-filters {
+            position: sticky;
+            top: 88px;
+            background: #fff;
+            border: 1px solid var(--color-gray-200);
+            border-radius: 14px;
+            padding: 1.15rem;
+            max-height: calc(100vh - 110px);
+            overflow-y: auto;
+        }
+
+        .fblock { margin-bottom: 1.15rem; }
+        .fblock:last-child { margin-bottom: 0; }
+
+        .ftitle {
+            font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: .05em; color: var(--color-gray-500); margin-bottom: 0.45rem;
+        }
+
+        .fduo { display: flex; gap: 0.45rem; }
+
+        .finput, .fselect {
+            width: 100%; padding: 0.5rem 0.6rem; font-size: 0.85rem;
+            font-family: inherit; border: 1px solid var(--color-gray-300);
+            border-radius: 8px; outline: none; background: #fff;
+        }
+        .finput:focus, .fselect:focus { border-color: var(--color-primary); }
+
+        .fcheck {
+            display: flex; align-items: center; gap: 0.45rem;
+            font-size: 0.85rem; color: var(--color-gray-700);
+            padding: 0.2rem 0; cursor: pointer;
+        }
+
+        .type-chips { display: flex; gap: 0.4rem; }
+        .type-chip {
+            flex: 1; padding: 0.45rem 0.5rem; font-size: 0.8rem; font-weight: 600;
+            font-family: inherit; text-align: center; cursor: pointer;
+            border: 1px solid var(--color-gray-300); border-radius: 999px;
+            background: #fff; color: var(--color-gray-700); transition: all .15s;
+        }
+        .type-chip:hover { border-color: var(--color-primary); }
+        .type-chip.is-active {
+            background: var(--color-primary); border-color: var(--color-primary);
+            color: #03201f;
+        }
+
+        .search-toolbar {
+            display: flex; justify-content: space-between; align-items: center;
+            gap: 1rem; margin-bottom: 1.1rem; flex-wrap: wrap;
+        }
+
+        .result-count { font-size: 0.95rem; color: var(--color-gray-600); font-weight: 500; }
+        .result-count strong { color: var(--color-gray-900); }
+
+        .search-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.15rem;
+        }
+
+        .search-empty { padding: 3rem 1rem; text-align: center; color: var(--color-gray-500); }
+        .search-empty-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+
+        .pagination { display: flex; justify-content: center; gap: 0.4rem; margin-top: 2rem; flex-wrap: wrap; }
+        .page-btn {
+            min-width: 38px; padding: 0.45rem 0.7rem; border: 1px solid var(--color-gray-300);
+            border-radius: 8px; background: #fff; font-family: inherit; font-size: 0.85rem; cursor: pointer;
+        }
+        .page-btn.is-active { background: var(--color-primary); border-color: var(--color-primary); color: #03201f; font-weight: 700; }
+        .page-btn:disabled { opacity: .45; cursor: default; }
+
+        .filters-toggle-mobile { display: none; }
+
+        @media (max-width: 900px) {
+            .search-layout { grid-template-columns: 1fr; }
+            .search-filters { position: static; max-height: none; }
+            .search-filters.is-collapsed { display: none; }
+            .filters-toggle-mobile { display: inline-flex; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Search bar -->
+    <section class="search-bar-section">
+        <div class="container">
+            <form class="search-bar" id="search-form">
+                <input type="text" id="q" name="q" placeholder="Що ви шукаєте?" autocomplete="off"
+                    aria-label="Пошуковий запит">
+                <button type="submit" class="btn btn-primary">Шукати</button>
+                <button type="button" class="btn btn-ghost filters-toggle-mobile" id="toggle-filters">Фільтри</button>
+            </form>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="search-layout">
+            <aside class="search-filters is-collapsed" id="filters">
+                <div class="fblock">
+                    <div class="ftitle">Тип</div>
+                    <div class="type-chips" id="type-chips">
+                        <button type="button" class="type-chip is-active" data-type="">Усе</button>
+                        <button type="button" class="type-chip" data-type="item">Речі</button>
+                        <button type="button" class="type-chip" data-type="housing">Житло</button>
+                    </div>
+                </div>
+
+                <div class="fblock">
+                    <div class="ftitle">Категорія</div>
+                    <select id="f-category" class="fselect">
+                        <option value="">Усі категорії</option>
+                    </select>
+                </div>
+
+                <div class="fblock">
+                    <div class="ftitle">Ціна, ₴</div>
+                    <div class="fduo">
+                        <input type="number" id="f-min-price" class="finput" placeholder="від" min="0">
+                        <input type="number" id="f-max-price" class="finput" placeholder="до" min="0">
+                    </div>
+                </div>
+
+                <div class="fblock">
+                    <div class="ftitle">Місто</div>
+                    <input type="text" id="f-city" class="finput" placeholder="Напр., Київ">
+                </div>
+
+                <div class="fblock">
+                    <div class="ftitle">Вільно у період</div>
+                    <div class="fduo">
+                        <input type="date" id="f-from" class="finput" aria-label="Від">
+                        <input type="date" id="f-to" class="finput" aria-label="До">
+                    </div>
+                </div>
+
+                <div class="fblock">
+                    <div class="ftitle">Рейтинг власника</div>
+                    <select id="f-rating" class="fselect">
+                        <option value="">Будь-який</option>
+                        <option value="3">3★ і вище</option>
+                        <option value="4">4★ і вище</option>
+                        <option value="4.5">4.5★ і вище</option>
+                    </select>
+                </div>
+
+                <div class="fblock" id="housing-only" hidden>
+                    <div class="ftitle">Житло</div>
+                    <div class="fduo" style="margin-bottom:0.5rem;">
+                        <input type="number" id="f-min-rooms" class="finput" placeholder="кімнат від" min="0">
+                        <input type="number" id="f-max-rooms" class="finput" placeholder="до" min="0">
+                    </div>
+                    <div class="fduo" style="margin-bottom:0.5rem;">
+                        <input type="number" id="f-min-area" class="finput" placeholder="м² від" min="0">
+                        <input type="number" id="f-max-area" class="finput" placeholder="до" min="0">
+                    </div>
+                    <select id="f-period" class="fselect" style="margin-bottom:0.5rem;">
+                        <option value="">Будь-який термін</option>
+                        <option value="daily">Подобово</option>
+                        <option value="weekly">Потижнево</option>
+                        <option value="monthly">Помісячно</option>
+                        <option value="short_term">Короткостроково</option>
+                        <option value="long_term">Довгостроково</option>
+                    </select>
+                    <label class="fcheck"><input type="checkbox" id="f-pets"> Можна з тваринами</label>
+                    <label class="fcheck"><input type="checkbox" id="f-students"> Підходить студентам</label>
+                    <label class="fcheck"><input type="checkbox" id="f-parking"> Паркінг</label>
+                    <label class="fcheck"><input type="checkbox" id="f-internet"> Інтернет</label>
+                    <label class="fcheck"><input type="checkbox" id="f-furnished"> З меблями</label>
+                </div>
+
+                <div class="fblock">
+                    <label class="fcheck"><input type="checkbox" id="f-verified"> Лише перевірені власники</label>
+                    <label class="fcheck"><input type="checkbox" id="f-available"> Лише доступні зараз</label>
+                </div>
+
+                <button type="button" class="btn btn-ghost" id="reset-filters" style="width:100%;">
+                    Скинути фільтри
+                </button>
+            </aside>
+
+            <main>
+                <div class="search-toolbar">
+                    <span class="result-count" id="result-count">Завантаження…</span>
+                    <select id="sort" class="fselect" style="width:auto;">
+                        <option value="newest">Найновіші</option>
+                        <option value="price-asc">Спочатку дешевші</option>
+                        <option value="price-desc">Спочатку дорожчі</option>
+                        <option value="rating">За рейтингом</option>
+                        <option value="popular">Найпопулярніші</option>
+                    </select>
+                </div>
+
+                <div class="search-grid" id="grid"></div>
+                <div class="pagination" id="pagination"></div>
+            </main>
+        </div>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/navbar.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script>
+        (function () {
+            'use strict';
+
+            /**
+             * Every control maps to one URL parameter. Keeping the URL as the
+             * single source of truth makes results shareable and the browser's
+             * back button behave the way people expect from a search page.
+             */
+            const CONTROLS = {
+                q: 'search',
+                'f-category': 'category',
+                'f-min-price': 'minPrice',
+                'f-max-price': 'maxPrice',
+                'f-city': 'city',
+                'f-from': 'availableFrom',
+                'f-to': 'availableTo',
+                'f-rating': 'minRating',
+                'f-min-rooms': 'minRooms',
+                'f-max-rooms': 'maxRooms',
+                'f-min-area': 'minArea',
+                'f-max-area': 'maxArea',
+                'f-period': 'rentalPeriod',
+                sort: 'sort'
+            };
+
+            const CHECKBOXES = {
+                'f-pets': 'petsAllowed',
+                'f-students': 'studentsAllowed',
+                'f-parking': 'hasParking',
+                'f-internet': 'hasInternet',
+                'f-furnished': 'furnished',
+                'f-verified': 'verifiedOwner',
+                'f-available': 'available'
+            };
+
+            let listingType = '';
+            let page = 1;
+
+            const el = id => document.getElementById(id);
+
+            /** Reads the URL into the form controls. */
+            function applyUrlToForm() {
+                const params = new URLSearchParams(location.search);
+
+                listingType = params.get('listingType') || '';
+                page = Math.max(1, parseInt(params.get('page') || '1', 10));
+
+                for (const [id, param] of Object.entries(CONTROLS)) {
+                    const node = el(id);
+                    if (node) node.value = params.get(param) || '';
+                }
+                for (const [id, param] of Object.entries(CHECKBOXES)) {
+                    const node = el(id);
+                    if (node) node.checked = params.get(param) === 'true';
+                }
+                if (!el('sort').value) el('sort').value = 'newest';
+
+                document.querySelectorAll('#type-chips .type-chip').forEach(chip => {
+                    chip.classList.toggle('is-active', chip.dataset.type === listingType);
+                });
+                el('housing-only').hidden = listingType !== 'housing';
+            }
+
+            /** Builds query params from the current form state. */
+            function collect() {
+                const params = new URLSearchParams();
+
+                for (const [id, param] of Object.entries(CONTROLS)) {
+                    const node = el(id);
+                    if (node && node.value.trim() !== '') params.set(param, node.value.trim());
+                }
+                for (const [id, param] of Object.entries(CHECKBOXES)) {
+                    if (el(id)?.checked) params.set(param, 'true');
+                }
+                if (listingType) params.set('listingType', listingType);
+
+                // An availability window only applies when both ends are set,
+                // so drop a lone date rather than sending a filter the API
+                // would silently ignore.
+                if (params.has('availableFrom') !== params.has('availableTo')) {
+                    params.delete('availableFrom');
+                    params.delete('availableTo');
+                }
+
+                if (page > 1) params.set('page', String(page));
+                return params;
+            }
+
+            function renderPagination(current, pages) {
+                const box = el('pagination');
+                if (pages <= 1) { box.innerHTML = ''; return; }
+
+                const from = Math.max(1, current - 2);
+                const to = Math.min(pages, from + 4);
+                const numbers = [];
+                for (let n = from; n <= to; n += 1) numbers.push(n);
+
+                box.innerHTML = `
+                    <button class="page-btn" data-page="${current - 1}" ${current === 1 ? 'disabled' : ''}>‹</button>
+                    ${numbers.map(n => `<button class="page-btn ${n === current ? 'is-active' : ''}" data-page="${n}">${n}</button>`).join('')}
+                    <button class="page-btn" data-page="${current + 1}" ${current === pages ? 'disabled' : ''}>›</button>`;
+            }
+
+            async function run({ pushUrl = true } = {}) {
+                const params = collect();
+
+                if (pushUrl) {
+                    const url = params.toString() ? `?${params}` : location.pathname;
+                    history.replaceState(null, '', url);
+                }
+
+                const grid = el('grid');
+                grid.innerHTML = '';
+                el('result-count').textContent = 'Завантаження…';
+
+                const request = new URLSearchParams(params);
+                request.set('limit', '24');
+
+                try {
+                    const data = await api.get(`/api/products?${request}`);
+
+                    el('result-count').innerHTML = data.total
+                        ? `Знайдено <strong>${data.total}</strong>`
+                        : 'Нічого не знайдено';
+
+                    if (!data.products.length) {
+                        grid.innerHTML = `
+                            <div class="search-empty" style="grid-column:1/-1;">
+                                <div class="search-empty-icon">🔍</div>
+                                <p>За цим запитом нічого немає.<br>Спробуйте інші слова або зніміть частину фільтрів.</p>
+                            </div>`;
+                        el('pagination').innerHTML = '';
+                        return;
+                    }
+
+                    for (const product of data.products) {
+                        grid.appendChild(createProductCard(product));
+                    }
+                    renderPagination(data.page, data.pages);
+                } catch (error) {
+                    el('result-count').textContent = 'Помилка завантаження';
+                    grid.innerHTML = `<p style="grid-column:1/-1;color:#ef4444;">${escapeHtml(error.message)}</p>`;
+                }
+            }
+
+            /** Any filter change resets to the first page. */
+            function rerun() {
+                page = 1;
+                run();
+            }
+
+            async function loadCategories() {
+                try {
+                    const config = await api.get('/api/config');
+                    const select = el('f-category');
+                    const isUk = window.i18n ? i18n.getLanguage() === 'uk' : true;
+                    const current = new URLSearchParams(location.search).get('category') || '';
+
+                    for (const category of config.categories || []) {
+                        const option = document.createElement('option');
+                        option.value = category.id;
+                        option.textContent = `${category.icon} ${isUk ? category.nameUk : category.name}`;
+                        select.appendChild(option);
+                    }
+                    select.value = current;
+                } catch (error) {
+                    console.error('Failed to load categories:', error);
+                }
+            }
+
+            function bind() {
+                el('search-form').addEventListener('submit', event => {
+                    event.preventDefault();
+                    rerun();
+                });
+
+                const debounced = debounce(rerun, 350);
+                [...Object.keys(CONTROLS), ...Object.keys(CHECKBOXES)].forEach(id => {
+                    const node = el(id);
+                    if (!node || id === 'q') return;
+                    node.addEventListener('change', debounced);
+                });
+
+                el('type-chips').addEventListener('click', event => {
+                    const chip = event.target.closest('[data-type]');
+                    if (!chip) return;
+                    document.querySelectorAll('#type-chips .type-chip')
+                        .forEach(c => c.classList.remove('is-active'));
+                    chip.classList.add('is-active');
+                    listingType = chip.dataset.type;
+                    el('housing-only').hidden = listingType !== 'housing';
+                    rerun();
+                });
+
+                el('pagination').addEventListener('click', event => {
+                    const button = event.target.closest('[data-page]');
+                    if (!button || button.disabled) return;
+                    page = Number(button.dataset.page);
+                    run();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+
+                el('reset-filters').addEventListener('click', () => {
+                    document.querySelectorAll('.search-filters input').forEach(input => {
+                        if (input.type === 'checkbox') input.checked = false;
+                        else input.value = '';
+                    });
+                    document.querySelectorAll('.search-filters select').forEach(s => { s.value = ''; });
+                    listingType = '';
+                    document.querySelectorAll('#type-chips .type-chip')
+                        .forEach(c => c.classList.toggle('is-active', c.dataset.type === ''));
+                    el('housing-only').hidden = true;
+                    rerun();
+                });
+
+                el('toggle-filters').addEventListener('click', () => {
+                    el('filters').classList.toggle('is-collapsed');
+                });
+
+                // Back/forward should restore the previous result set.
+                window.addEventListener('popstate', () => {
+                    applyUrlToForm();
+                    run({ pushUrl: false });
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', async () => {
+                if (typeof checkAuth === 'function') checkAuth();
+
+                // Filters start expanded on desktop; the collapsed class only
+                // takes effect under the mobile breakpoint.
+                if (window.innerWidth > 900) el('filters').classList.remove('is-collapsed');
+
+                await loadCategories();
+                applyUrlToForm();
+                bind();
+                await run({ pushUrl: false });
+                el('q').focus();
+            });
+        })();
+    </script>
+</body>
+
+</html>
