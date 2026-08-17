@@ -11,7 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="icon" type="image/png" href="/assets/images/logo.png">
-    <script src="/assets/js/preloader.js"></script>
 </head>
 
 <body>
@@ -47,7 +46,7 @@
     </section>
 
     <!-- New request modal -->
-    <div id="request-modal-backdrop" class="modal-backdrop" style="display: none;">
+    <div id="request-modal-backdrop" class="modal-backdrop">
         <div id="request-modal" class="modal">
             <div class="modal-header">
                 <h3 data-i18n="rentalRequests.formTitle">What do you want to rent?</h3>
@@ -149,18 +148,54 @@
                 listEl.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;"><p data-i18n="rentalRequests.empty">No rental requests yet. Be the first to post what you need!</p></div>';
                 return;
             }
-            listEl.innerHTML = requests.map(r => `
-                <div class="card" style="padding: 1.25rem;">
+            listEl.innerHTML = requests.map(r => {
+                const isMine = currentUser && r.user && r.user.id === currentUser.id;
+                const description = r.description || '';
+
+                // Show the category's name, not its raw id — the id would
+                // render as "vehicles" where the rest of the site says
+                // "Транспорт".
+                const categoryLabel = r.category ? getCategoryName(r.category) : '';
+
+                return `
+                <div class="card" style="padding: 1.25rem; display: flex; flex-direction: column;">
                     <h3 style="margin-bottom: 0.5rem;">${escapeHtml(r.title)}</h3>
-                    <p style="color: var(--color-gray-600); font-size: 0.875rem; margin-bottom: 0.75rem;">${escapeHtml((r.description || '').slice(0, 160))}${(r.description || '').length > 160 ? '…' : ''}</p>
+                    <p style="color: var(--color-gray-600); font-size: 0.875rem; margin-bottom: 0.75rem;">${escapeHtml(description.slice(0, 160))}${description.length > 160 ? '…' : ''}</p>
                     <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
-                        ${r.category ? `<span class="badge">${escapeHtml(r.category)}</span>` : ''}
+                        ${categoryLabel ? `<span class="badge">${escapeHtml(categoryLabel)}</span>` : ''}
                         ${r.city ? `<span class="badge">${escapeHtml(r.city)}</span>` : ''}
                     </div>
                     <p style="font-size: 0.8rem; color: var(--color-gray-500);">${r.user ? escapeHtml(r.user.name) : '—'}${r.user && r.user.city ? ' · ' + escapeHtml(r.user.city) : ''}</p>
-                    <p style="font-size: 0.75rem; color: var(--color-gray-400); margin-top: 0.25rem;">${new Date(r.createdAt).toLocaleDateString()}</p>
-                </div>
-            `).join('');
+                    <p style="font-size: 0.75rem; color: var(--color-gray-400); margin-top: 0.25rem;">${new Date(r.createdAt).toLocaleDateString('uk-UA')}</p>
+
+                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                        ${isMine
+                            ? `<button type="button" class="btn btn-ghost btn-sm" data-delete="${r.id}"
+                                   style="color: var(--color-error);">Видалити</button>`
+                            : (r.user
+                                ? `<a class="btn btn-outline btn-sm"
+                                      href="/pages/messages.html?user=${encodeURIComponent(r.user.id)}">💬 Написати</a>`
+                                : '')}
+                    </div>
+                </div>`;
+            }).join('');
+
+            // Delegated: the cards are re-rendered on every filter change.
+            listEl.querySelectorAll('[data-delete]').forEach(button => {
+                button.addEventListener('click', () => deleteRequest(button.dataset.delete));
+            });
+        }
+
+        /** Removes one of your own requests. The server re-checks ownership. */
+        async function deleteRequest(id) {
+            if (!confirm('Видалити цей запит?')) return;
+            try {
+                await api.delete(`/api/rental-requests/${id}`);
+                showToast('success', 'Запит видалено');
+                await loadRequests();
+            } catch (error) {
+                showToast('error', error.message);
+            }
         }
 
         function escapeHtml(s) {
@@ -178,26 +213,43 @@
             document.getElementById('request-description').value = '';
             document.getElementById('request-category').value = '';
             document.getElementById('request-city').value = '';
-            document.getElementById('request-modal-backdrop').style.display = 'flex';
+
+            // The stylesheet hides both the backdrop and the dialog with
+            // visibility/opacity and reveals them via .active. Setting
+            // display alone left them invisible, so the button appeared dead.
+            document.getElementById('request-modal-backdrop').classList.add('active');
+            document.getElementById('request-modal').classList.add('active');
+            document.getElementById('request-title').focus();
         }
 
         function closeRequestModal() {
-            document.getElementById('request-modal-backdrop').style.display = 'none';
+            document.getElementById('request-modal-backdrop').classList.remove('active');
+            document.getElementById('request-modal').classList.remove('active');
         }
 
         async function submitRequest(e) {
             e.preventDefault();
+
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            // Locked before the first await: without this a second click while
+            // the request is in flight would publish a duplicate.
+            if (submitBtn.disabled) return;
+            submitBtn.disabled = true;
+
             const title = document.getElementById('request-title').value.trim();
             const description = document.getElementById('request-description').value.trim();
             const category = document.getElementById('request-category').value || null;
             const city = document.getElementById('request-city').value || null;
+
             try {
                 await api.post('/api/rental-requests', { title, description, category, city });
-                showToast('success', document.querySelector('[data-i18n="rentalRequests.submitSuccess"]') ? i18n.t('rentalRequests.submitSuccess') : 'Request published!');
+                showToast('success', i18n.t('rentalRequests.submitSuccess'));
                 closeRequestModal();
-                loadRequests();
+                await loadRequests();
             } catch (err) {
-                showToast('error', err.message || 'Failed to create request');
+                showToast('error', err.message || 'Не вдалося створити запит');
+            } finally {
+                submitBtn.disabled = false;
             }
         }
     </script>
