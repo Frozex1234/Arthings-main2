@@ -98,6 +98,10 @@ function buildWhere(filters = {}) {
 
     if (filters.listingType) where.listingType = filters.listingType;
 
+    // An explicit id set short-circuits nothing else — it simply narrows the
+    // result to those listings, so deleted ones drop out on their own.
+    if (filters.ids?.length) where.id = { in: filters.ids };
+
     if (filters.search) {
         // `insensitive` matters: Postgres `contains` is case-sensitive by
         // default, which previously made "Дриль" unfindable as "дриль".

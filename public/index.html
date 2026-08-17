@@ -21,126 +21,49 @@
     <!-- Mobile Navigation -->
     
 
-    <!-- Hero Section -->
-    <section class="hero">
+    <!-- Hero: the homepage is an entry point to search, not a catalogue.
+         Submitting hands off to the dedicated results page so filters,
+         pagination and shareable URLs all live in one place. -->
+    <section class="home-hero">
         <div class="container">
-            <div class="hero-content">
-                <div class="hero-badge" data-i18n="hero.badge">Local Rental Community</div>
-                <h1 data-i18n="hero.title">Share you love, love you share</h1>
-                <p data-i18n="hero.subtitle">Access what you need, when you need it. From emergency gear to everyday
-                    essentials, connect with your local community.</p>
-                <div class="hero-actions">
-                    <a href="#products" class="btn btn-primary btn-lg" data-i18n="hero.cta.browse">Browse Items</a>
-                    <a href="/pages/add-item.html" class="btn btn-outline btn-lg"
-                        style="border-color: rgba(255,255,255,0.3); color: white;" data-i18n="hero.cta.list">List Your
-                        Item</a>
-                </div>
+            <h1 class="home-title">Орендуйте те, що потрібно — поруч із вами</h1>
+            <p class="home-subtitle">Речі та житло від людей із вашого міста</p>
+
+            <form class="home-search" id="home-search">
+                <input type="text" id="home-q" autocomplete="off"
+                    placeholder="Що ви шукаєте? Напр., генератор, намет, квартира"
+                    aria-label="Пошук оголошень">
+                <button type="submit" class="btn btn-primary btn-lg">Шукати</button>
+            </form>
+
+            <div class="home-quick">
+                <a href="/pages/search.html?listingType=item">Усі речі</a>
+                <a href="/pages/search.html?listingType=housing">Житло</a>
+                <a href="/pages/map.html">На карті</a>
             </div>
-            <div class="hero-decoration"></div>
         </div>
     </section>
 
-    <!-- Search Section -->
-    <section class="container" style="margin-top: -60px; position: relative; z-index: 10;">
-        <div class="search-section">
-            <div class="search-bar">
-                <div class="search-input-wrapper">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                    <input type="text" id="search-input" class="form-input search-input"
-                        data-i18n-placeholder="search.placeholder" placeholder="Search for items...">
-                </div>
-                <button id="filters-toggle" class="filters-toggle">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="4" y1="21" x2="4" y2="14"></line>
-                        <line x1="4" y1="10" x2="4" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="12"></line>
-                        <line x1="12" y1="8" x2="12" y2="3"></line>
-                        <line x1="20" y1="21" x2="20" y2="16"></line>
-                        <line x1="20" y1="12" x2="20" y2="3"></line>
-                        <line x1="1" y1="14" x2="7" y2="14"></line>
-                        <line x1="9" y1="8" x2="15" y2="8"></line>
-                        <line x1="17" y1="16" x2="23" y2="16"></line>
-                    </svg>
-                    <span data-i18n="filters.toggle">Filters</span>
-                </button>
-                <button id="search-btn" class="btn btn-primary" data-i18n="search.button">Search</button>
-            </div>
-
-            <!-- Filters Panel -->
-            <div id="filters-panel" class="filters-panel">
-                <div class="filters-grid">
-                    <div class="filter-group">
-                        <label class="filter-label" data-i18n="filters.category">Category</label>
-                        <select id="filter-category" class="form-input form-select">
-                            <option value="" data-i18n="filters.all">All Categories</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label class="filter-label" data-i18n="filters.city">City</label>
-                        <select id="filter-city" class="form-input form-select">
-                            <option value="" data-i18n="filters.allCities">All Cities</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label class="filter-label" data-i18n="filters.minPrice">Min price</label>
-                        <input type="number" id="filter-min-price" class="form-input" min="0" placeholder="0">
-                    </div>
-                    <div class="filter-group">
-                        <label class="filter-label" data-i18n="filters.maxPrice">Max price</label>
-                        <input type="number" id="filter-max-price" class="form-input" min="0" placeholder="2000">
-                    </div>
-                    <div class="filter-group">
-                        <label class="filter-label" data-i18n="filters.sort">Sort by</label>
-                        <select id="filter-sort" class="form-input form-select">
-                            <option value="newest" data-i18n="filters.sort.newest">Newest</option>
-                            <option value="price-asc" data-i18n="filters.sort.priceLow">Price: Low to High</option>
-                            <option value="price-desc" data-i18n="filters.sort.priceHigh">Price: High to Low</option>
-                            <option value="popular" data-i18n="filters.sort.popular">Most Popular</option>
-                        </select>
-                    </div>
-                    <div class="filter-group" style="display: flex; align-items: flex-end;">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="filter-available">
-                            <span data-i18n="filters.available">Available only</span>
-                        </label>
-                    </div>
-                    <div class="filter-group" id="housing-filter-students">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="filter-students-allowed">
-                            <span>🎓 Можна студентам</span>
-                        </label>
-                    </div>
-                    <div class="filter-group" id="housing-filter-rooms">
-                        <label class="filter-label">Кімнат від</label>
-                        <input type="number" id="filter-min-rooms" class="form-input" min="0" placeholder="1">
-                    </div>
-                </div>
-                <div style="display: flex; gap: 1rem; margin-top: 1.5rem; justify-content: flex-end;">
-                    <button id="clear-filters" class="btn btn-ghost" data-i18n="filters.clear">Clear All</button>
-                    <button id="apply-filters" class="btn btn-primary" data-i18n="filters.apply">Apply Filters</button>
-                </div>
-            </div>
-
-            <!-- Category Pills -->
-            <div id="category-pills" class="category-pills"></div>
-        </div>
-    </section>
-
-    <!-- Products Section -->
-    <section id="products" class="section">
+    <!-- Categories: a second way into the same search page. -->
+    <section class="section" style="padding-bottom: 0;">
         <div class="container">
-            <div class="section-header">
-                <h2 data-i18n="hero.cta.browse">Browse Items</h2>
-                <p id="results-count"></p>
-            </div>
-            <div id="product-grid" class="product-grid">
-                <!-- Products will be loaded here -->
-            </div>
+            <h2 class="home-heading">Категорії</h2>
+            <div class="home-categories" id="home-categories"></div>
         </div>
     </section>
+
+    <!-- Recently viewed. Hidden entirely when there is no history, so a
+         first-time visitor never sees an empty shelf. -->
+    <section class="section" id="recent-section" hidden>
+        <div class="container">
+            <div class="home-heading-row">
+                <h2 class="home-heading">Ви переглядали</h2>
+                <button type="button" class="btn btn-ghost btn-sm" id="clear-recent">Очистити</button>
+            </div>
+            <div class="product-grid" id="recent-grid"></div>
+        </div>
+    </section>
+
 
     <!-- Footer -->
     <footer class="footer">
@@ -216,236 +139,64 @@
     <script src="/components/cookie-banner.js"></script>
     <script src="/assets/js/i18n.js"></script>
     <script src="/assets/js/navbar.js"></script>
-    <script src="/assets/js/main.js"></script>
+    <script src="/assets/js/recently-viewed.js"></script>
     <script>
-        // Page-specific JavaScript
-        let products = [];
-        let categories = [];
-        let cities = [];
+        (function () {
+            'use strict';
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            await loadConfig();
-            await loadProducts();
-            setupEventListeners();
-        });
+            const el = id => document.getElementById(id);
 
-        async function loadConfig() {
-            try {
-                const data = await api.get('/api/config');
-                categories = data.categories || [];
-                cities = data.cities || [];
-
-                renderCategoryPills();
-                populateFilters();
-            } catch (error) {
-                console.error('Failed to load config:', error);
+            /** Hands the query to the search page rather than rendering
+             *  results here — one place owns filtering and pagination. */
+            function goToSearch(params) {
+                const query = new URLSearchParams(params);
+                window.location.href = `/pages/search.html${query.toString() ? `?${query}` : ''}`;
             }
-        }
 
-        async function loadProducts(params = {}) {
-            const productGrid = document.getElementById('product-grid');
-            showLoading(productGrid);
+            async function loadCategories() {
+                try {
+                    const config = await api.get('/api/config');
+                    const isUk = window.i18n ? i18n.getLanguage() === 'uk' : true;
 
-            try {
-                const queryParams = new URLSearchParams();
-                if (params.search) queryParams.set('search', params.search);
-                if (params.category) queryParams.set('category', params.category);
-                if (params.city) queryParams.set('city', params.city);
-                if (params.minPrice) queryParams.set('minPrice', params.minPrice);
-                if (params.maxPrice) queryParams.set('maxPrice', params.maxPrice);
-                if (params.sort) queryParams.set('sort', params.sort);
-                if (params.available) queryParams.set('available', 'true');
-                if (params.studentsAllowed) queryParams.set('studentsAllowed', 'true');
-                if (params.minRooms) queryParams.set('minRooms', params.minRooms);
-
-                const queryString = queryParams.toString();
-                const data = await api.get(`/api/products${queryString ? '?' + queryString : ''}`);
-                products = data.products || [];
-
-                // Check favorites status for each product
-                if (currentUser) {
-                    try {
-                        const favData = await api.get('/api/favorites');
-                        const favoriteIds = new Set(favData.favorites.map(f => f.id));
-                        products = products.map(p => ({
-                            ...p,
-                            isFavorite: favoriteIds.has(p.id)
-                        }));
-                    } catch (e) {
-                        // Ignore favorites error
-                    }
+                    el('home-categories').innerHTML = (config.categories || []).map(category => `
+                        <a class="home-category" href="/pages/search.html?category=${encodeURIComponent(category.id)}">
+                            <span class="home-category-icon">${category.icon}</span>
+                            <span>${escapeHtml(isUk ? category.nameUk : category.name)}</span>
+                        </a>`).join('');
+                } catch (error) {
+                    console.error('Failed to load categories:', error);
                 }
-
-                renderProducts();
-            } catch (error) {
-                productGrid.innerHTML = `
-                    <div class="empty-state">
-                        <p>${error.message}</p>
-                    </div>
-                `;
-            }
-        }
-
-        function renderProducts() {
-            const productGrid = document.getElementById('product-grid');
-            const resultsCount = document.getElementById('results-count');
-
-            if (products.length === 0) {
-                showEmptyState(productGrid, i18n.t('common.noResults'));
-                resultsCount.textContent = '';
-                return;
             }
 
-            const key = products.length === 1 ? 'search.foundSingle' : 'search.found';
-            let text = i18n.t(key).replace('{count}', products.length);
-            // Index page doesn't track selectedCity in this scope easily unless we parse filters, but renderProducts uses global state?
-            // Actually renderProducts in index.html doesn't use selectedCity variable in its scope? 
-            // Wait, index.html script lines 281-490.
-            // applyFilters reads DOM. renderProducts reads `products` array. 
-            // `loadProducts` accepts params.
-            // There is no global `selectedCity` variable in index.html! (unlike map.html)
-            // It reads from `#filter-city`.
-            const selectedCity = document.getElementById('filter-city').value;
-            if (selectedCity) {
-                text += i18n.t('search.inCity').replace('{city}', selectedCity);
-            }
-            resultsCount.textContent = text;
-            productGrid.innerHTML = '';
+            async function loadRecentlyViewed() {
+                const products = await recentlyViewed.fetchViewed(8);
+                if (!products.length) return;
 
-            products.forEach(product => {
-                const card = createProductCard(product);
-                productGrid.appendChild(card);
-            });
-        }
-
-        function renderCategoryPills() {
-            const container = document.getElementById('category-pills');
-            container.innerHTML = `
-                <button class="category-pill active" data-category="">
-                    <span class="category-pill-icon">🏠</span>
-                    <span data-i18n="filters.allShort">${i18n.t('filters.allShort')}</span>
-                </button>
-            `;
-
-            categories.forEach(cat => {
-                const pill = document.createElement('button');
-                pill.className = 'category-pill';
-                pill.dataset.category = cat.id;
-                pill.innerHTML = `
-                    <span class="category-pill-icon">${cat.icon}</span>
-                    <span>${i18n.getLanguage() === 'uk' ? cat.nameUk : cat.name}</span>
-                `;
-                container.appendChild(pill);
-            });
-
-            // Add click handlers
-            container.querySelectorAll('.category-pill').forEach(pill => {
-                pill.addEventListener('click', () => {
-                    container.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
-                    pill.classList.add('active');
-
-                    document.getElementById('filter-category').value = pill.dataset.category;
-                    applyFilters();
-                });
-            });
-        }
-
-        function populateFilters() {
-            const categorySelect = document.getElementById('filter-category');
-            const citySelect = document.getElementById('filter-city');
-
-            // Populate categories
-            categories.forEach(cat => {
-                const option = document.createElement('option');
-                option.value = cat.id;
-                option.textContent = i18n.getLanguage() === 'uk' ? cat.nameUk : cat.name;
-                categorySelect.appendChild(option);
-            });
-
-            // Populate cities
-            cities.forEach(city => {
-                const option = document.createElement('option');
-                option.value = city;
-                option.textContent = city;
-                citySelect.appendChild(option);
-            });
-        }
-
-        function setupEventListeners() {
-            // Search
-            const searchInput = document.getElementById('search-input');
-            const searchBtn = document.getElementById('search-btn');
-
-            searchBtn.addEventListener('click', applyFilters);
-            searchInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') applyFilters();
-            });
-
-            // Debounced search
-            searchInput.addEventListener('input', debounce(() => {
-                if (searchInput.value.length >= 3 || searchInput.value.length === 0) {
-                    applyFilters();
+                const grid = el('recent-grid');
+                grid.innerHTML = '';
+                for (const product of products) {
+                    grid.appendChild(createProductCard(product));
                 }
-            }, 500));
-
-            // Filters toggle
-            document.getElementById('filters-toggle').addEventListener('click', () => {
-                document.getElementById('filters-panel').classList.toggle('active');
-            });
-
-            // Apply filters
-            document.getElementById('apply-filters').addEventListener('click', applyFilters);
-
-            // Clear filters
-            document.getElementById('clear-filters').addEventListener('click', () => {
-                document.getElementById('search-input').value = '';
-                document.getElementById('filter-category').value = '';
-                document.getElementById('filter-city').value = '';
-                document.getElementById('filter-min-price').value = '';
-                document.getElementById('filter-max-price').value = '';
-                document.getElementById('filter-sort').value = 'newest';
-                document.getElementById('filter-available').checked = false;
-                document.getElementById('filter-students-allowed').checked = false;
-                document.getElementById('filter-min-rooms').value = '';
-
-                // Reset category pills
-                document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
-                document.querySelector('.category-pill[data-category=""]').classList.add('active');
-
-                loadProducts();
-            });
-
-            // User dropdown
-            const userMenuBtn = document.querySelector('.user-menu-btn');
-            const dropdownMenu = document.querySelector('.dropdown-menu');
-
-            if (userMenuBtn && dropdownMenu) {
-                userMenuBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    dropdownMenu.classList.toggle('active');
-                });
-
-                document.addEventListener('click', () => {
-                    dropdownMenu.classList.remove('active');
-                });
+                el('recent-section').hidden = false;
             }
-        }
 
-        function applyFilters() {
-            const params = {
-                search: document.getElementById('search-input').value,
-                category: document.getElementById('filter-category').value,
-                city: document.getElementById('filter-city').value,
-                minPrice: document.getElementById('filter-min-price').value,
-                maxPrice: document.getElementById('filter-max-price').value,
-                sort: document.getElementById('filter-sort').value,
-                available: document.getElementById('filter-available').checked
-                , studentsAllowed: document.getElementById('filter-students-allowed').checked
-                , minRooms: document.getElementById('filter-min-rooms').value
-            };
+            document.addEventListener('DOMContentLoaded', async () => {
+                if (typeof checkAuth === 'function') checkAuth();
 
-            loadProducts(params);
-        }
+                el('home-search').addEventListener('submit', event => {
+                    event.preventDefault();
+                    const value = el('home-q').value.trim();
+                    goToSearch(value ? { search: value } : {});
+                });
+
+                el('clear-recent').addEventListener('click', () => {
+                    recentlyViewed.clearViewed();
+                    el('recent-section').hidden = true;
+                });
+
+                await Promise.all([loadCategories(), loadRecentlyViewed()]);
+            });
+        })();
     </script>
 
 

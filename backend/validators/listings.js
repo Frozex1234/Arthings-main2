@@ -110,6 +110,19 @@ const update = z.object({
 const filterFields = {
     listingType: listingType.optional(),
     search: optionalText(160),
+    /** Explicit id set, e.g. `ids=prod-4,prod-9`. Used by the "recently
+     *  viewed" rail so it can fetch its listings in one request instead of
+     *  one per card. */
+    ids: z
+        .union([z.string(), z.array(z.string())])
+        .transform(value => {
+            const parts = Array.isArray(value) ? value : value.split(',');
+            return parts
+                .map(part => Number.parseInt(String(part).replace('prod-', ''), 10))
+                .filter(id => Number.isInteger(id) && id > 0)
+                .slice(0, 50);
+        })
+        .optional(),
     category: optionalText(50),
     housingPreset: optionalText(40),
     minPrice: optionalNumeric({ min: 0 }),
