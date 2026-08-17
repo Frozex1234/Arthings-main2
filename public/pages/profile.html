@@ -147,13 +147,22 @@
                 <h3 style="text-align: center; margin-bottom: 0.5rem;">Delete Account?</h3>
             </div>
             <div style="text-align: center; padding: 0 1.5rem 1.5rem;">
-                <p style="color: var(--color-gray-600); margin-bottom: 1.5rem;">
-                    This action cannot be undone. All your listings, favorites, rental history, and personal data will
-                    be permanently deleted.
+                <p style="color: var(--color-gray-600); margin-bottom: 1.25rem;">
+                    Цю дію не можна скасувати. Усі ваші оголошення, обране, історія оренд
+                    та особисті дані будуть видалені назавжди.
                 </p>
+
+                <!-- The server requires the password here, so a stolen session
+                     alone cannot destroy an account and everything on it. -->
+                <div class="form-group" style="text-align: left; margin-bottom: 1.25rem;">
+                    <label class="form-label" for="delete-password">Підтвердіть паролем</label>
+                    <input type="password" id="delete-password" class="form-input"
+                        placeholder="Ваш пароль" autocomplete="current-password">
+                </div>
+
                 <div style="display: flex; gap: 1rem; justify-content: center;">
-                    <button type="button" class="btn btn-ghost" id="delete-cancel-btn">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="delete-confirm-btn">Delete Account</button>
+                    <button type="button" class="btn btn-ghost" id="delete-cancel-btn">Скасувати</button>
+                    <button type="button" class="btn btn-danger" id="delete-confirm-btn">Видалити акаунт</button>
                 </div>
             </div>
         </div>
@@ -261,11 +270,18 @@
 
         // Modal functions
         function openDeleteModal() {
+            const password = document.getElementById('delete-password');
+            password.value = '';
+            clearFormError(password);
             document.getElementById('delete-modal-backdrop').classList.add('active');
             document.getElementById('delete-modal').classList.add('active');
+            password.focus();
         }
 
         function closeDeleteModal() {
+            // Do not leave the password sitting in the DOM after the dialog
+            // is dismissed.
+            document.getElementById('delete-password').value = '';
             document.getElementById('delete-modal-backdrop').classList.remove('active');
             document.getElementById('delete-modal').classList.remove('active');
         }
@@ -292,24 +308,26 @@
 
             // Confirm deletion
             confirmBtn.addEventListener('click', async () => {
+                const passwordInput = document.getElementById('delete-password');
+                const password = passwordInput.value;
+
+                if (!password) {
+                    showFormError(passwordInput, 'Введіть пароль, щоб підтвердити видалення');
+                    return;
+                }
+
                 try {
                     confirmBtn.disabled = true;
-                    confirmBtn.textContent = 'Deleting...';
+                    confirmBtn.textContent = 'Видаляємо…';
 
-                    const response = await fetch('/api/auth/account', {
-                        method: 'DELETE',
-                        credentials: 'include'
-                    });
-
-                    if (!response.ok) {
-                        const data = await response.json();
-                        throw new Error(data.error || 'Failed to delete account');
-                    }
+                    // Goes through the api helper rather than a bare fetch:
+                    // the helper attaches the CSRF token, without which the
+                    // server rejects every state-changing request.
+                    await api.delete('/api/auth/account', { password });
 
                     closeDeleteModal();
-                    showToast('success', 'Account deleted successfully');
+                    showToast('success', 'Акаунт видалено');
 
-                    // Redirect to home after a short delay
                     setTimeout(() => {
                         window.location.href = '/';
                     }, 1500);
@@ -317,8 +335,9 @@
                 } catch (error) {
                     console.error('Delete account error:', error);
                     showToast('error', error.message);
+                    passwordInput.value = '';
                     confirmBtn.disabled = false;
-                    confirmBtn.textContent = 'Delete Account';
+                    confirmBtn.textContent = 'Видалити акаунт';
                 }
             });
         }
