@@ -196,15 +196,15 @@
     <!-- Hero + categories -->
     <section class="housing-hero">
         <div class="container">
-            <h1>Оренда житла</h1>
-            <p>Квартири, будинки, кімнати та житло для студентів по всій Україні</p>
+            <h1 data-i18n="f.housingTitle">Оренда житла</h1>
+            <p data-i18n="f.housingSubtitle">Квартири, будинки, кімнати та житло для студентів по всій Україні</p>
 
             <div class="housing-search">
                 <input type="text" id="location-search" autocomplete="off"
-                    placeholder="Місто, село або вулиця…" aria-label="Пошук за адресою">
+                    data-i18n-placeholder="f.placeSearch" placeholder="Місто, село або вулиця…" aria-label="Пошук за адресою">
                 <div id="location-suggestions" class="map-suggestions" hidden
                      style="position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:50;background:#fff;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 12px 28px rgba(0,0,0,.12);max-height:300px;overflow-y:auto;"></div>
-                <a href="/pages/map.html?type=housing" class="btn btn-ghost">🗺️ На карті</a>
+                <a href="/pages/map.html?type=housing" class="btn btn-ghost" data-i18n="f.onMap">🗺️ На карті</a>
             </div>
 
             <div class="category-scroller" id="category-scroller"></div>
@@ -216,43 +216,43 @@
         <div class="housing-layout">
             <aside class="housing-filters">
                 <div class="filter-block">
-                    <div class="filter-title">Ціна, ₴</div>
+                    <div class="filter-title" data-i18n="f.price">Ціна, ₴</div>
                     <div class="filter-duo">
-                        <input type="number" id="f-min-price" class="filter-input" placeholder="від" min="0">
-                        <input type="number" id="f-max-price" class="filter-input" placeholder="до" min="0">
+                        <input type="number" id="f-min-price" class="filter-input" data-i18n-placeholder="common.from" placeholder="від" min="0">
+                        <input type="number" id="f-max-price" class="filter-input" data-i18n-placeholder="common.to" placeholder="до" min="0">
                     </div>
                 </div>
 
                 <div class="filter-block">
-                    <div class="filter-title">Кімнат</div>
+                    <div class="filter-title" data-i18n="f.rooms">Кімнат</div>
                     <div class="filter-duo">
-                        <input type="number" id="f-min-rooms" class="filter-input" placeholder="від" min="0">
-                        <input type="number" id="f-max-rooms" class="filter-input" placeholder="до" min="0">
+                        <input type="number" id="f-min-rooms" class="filter-input" data-i18n-placeholder="common.from" placeholder="від" min="0">
+                        <input type="number" id="f-max-rooms" class="filter-input" data-i18n-placeholder="common.to" placeholder="до" min="0">
                     </div>
                 </div>
 
                 <div class="filter-block">
-                    <div class="filter-title">Площа, м²</div>
+                    <div class="filter-title" data-i18n="f.area">Площа, м²</div>
                     <div class="filter-duo">
-                        <input type="number" id="f-min-area" class="filter-input" placeholder="від" min="0">
-                        <input type="number" id="f-max-area" class="filter-input" placeholder="до" min="0">
+                        <input type="number" id="f-min-area" class="filter-input" data-i18n-placeholder="common.from" placeholder="від" min="0">
+                        <input type="number" id="f-max-area" class="filter-input" data-i18n-placeholder="common.to" placeholder="до" min="0">
                     </div>
                 </div>
 
                 <div class="filter-block">
-                    <div class="filter-title">Термін оренди</div>
+                    <div class="filter-title" data-i18n="f.rentalPeriod">Термін оренди</div>
                     <select id="f-period" class="filter-select">
-                        <option value="">Будь-який</option>
-                        <option value="daily">Подобово</option>
-                        <option value="weekly">Потижнево</option>
-                        <option value="monthly">Помісячно</option>
-                        <option value="short_term">Короткостроково</option>
-                        <option value="long_term">Довгостроково</option>
+                        <option value="" data-i18n="f.any">Будь-який</option>
+                        <option value="daily" data-i18n="f.daily">Подобово</option>
+                        <option value="weekly" data-i18n="f.weekly">Потижнево</option>
+                        <option value="monthly" data-i18n="f.monthly">Помісячно</option>
+                        <option value="short_term" data-i18n="f.shortTerm">Короткостроково</option>
+                        <option value="long_term" data-i18n="f.longTerm">Довгостроково</option>
                     </select>
                 </div>
 
                 <div class="filter-block">
-                    <div class="filter-title">Зручності</div>
+                    <div class="filter-title" data-i18n="f.amenities">Зручності</div>
                     <label class="filter-check"><input type="checkbox" id="f-pets"> Можна з тваринами</label>
                     <label class="filter-check"><input type="checkbox" id="f-students"> Підходить студентам</label>
                     <label class="filter-check"><input type="checkbox" id="f-parking"> Паркінг</label>
@@ -262,27 +262,28 @@
                 </div>
 
                 <div class="filter-block">
-                    <div class="filter-title">Вільно у період</div>
+                    <div class="filter-title" data-i18n="f.availableBetween">Вільно у період</div>
                     <div class="filter-duo">
                         <input type="date" id="f-from" class="filter-input" aria-label="Від">
                         <input type="date" id="f-to" class="filter-input" aria-label="До">
                     </div>
                 </div>
 
-                <button type="button" id="reset-filters" class="btn btn-ghost" style="width:100%;margin-top:0.4rem;">
+                <button type="button" id="reset-filters" class="btn btn-ghost" style="width:100%;margin-top:0.4rem;" data-i18n="f.resetFilters">
+                    
                     Скинути фільтри
                 </button>
             </aside>
 
             <main>
                 <div class="housing-toolbar">
-                    <span class="housing-count" id="results-count">Завантаження…</span>
+                    <span class="housing-count" id="results-count" data-i18n="common.loading2">Завантаження…</span>
                     <select id="sort" class="filter-select" style="width:auto;">
-                        <option value="newest">Найновіші</option>
-                        <option value="price-asc">Спочатку дешевші</option>
-                        <option value="price-desc">Спочатку дорожчі</option>
-                        <option value="rating">За рейтингом</option>
-                        <option value="popular">Найпопулярніші</option>
+                        <option value="newest" data-i18n="f.sortNewest">Найновіші</option>
+                        <option value="price-asc" data-i18n="f.sortCheap">Спочатку дешевші</option>
+                        <option value="price-desc" data-i18n="f.sortExpensive">Спочатку дорожчі</option>
+                        <option value="rating" data-i18n="f.sortRating">За рейтингом</option>
+                        <option value="popular" data-i18n="f.sortPopular">Найпопулярніші</option>
                     </select>
                 </div>
 

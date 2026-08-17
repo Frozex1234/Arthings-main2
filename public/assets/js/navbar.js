@@ -136,6 +136,14 @@
             // Unwrap so the navbar is a direct child of body, as the CSS expects.
             holder.replaceWith(...holder.childNodes);
         }
+
+        // i18n has already run its initial pass by this point — it is loaded
+        // first and so fires earlier on DOMContentLoaded — meaning the labels
+        // just inserted have never been translated. Re-apply to the new nodes.
+        if (window.i18n) {
+            i18n.updatePage();
+            i18n.updateLangSwitcher();
+        }
     }
 
     if (document.readyState === 'loading') {

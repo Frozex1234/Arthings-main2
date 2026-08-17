@@ -30,13 +30,13 @@
             <div class="map-sidebar-header">
                 <div class="map-search-wrapper">
                     <input type="text" id="map-search" class="map-search-input" autocomplete="off"
-                        placeholder="Місто, село або вулиця…" aria-label="Пошук за адресою">
+                        data-i18n-placeholder="f.placeSearch" placeholder="Місто, село або вулиця…" aria-label="Пошук за адресою">
                     <div id="map-suggestions" class="map-suggestions" hidden></div>
                 </div>
 
                 <div class="map-actions">
-                    <button type="button" id="btn-near-me" class="map-action-btn">📍 Поруч зі мною</button>
-                    <button type="button" id="btn-reset" class="map-action-btn">Скинути</button>
+                    <button type="button" id="btn-near-me" class="map-action-btn" data-i18n="f.nearMe">📍 Поруч зі мною</button>
+                    <button type="button" id="btn-reset" class="map-action-btn" data-i18n="f.reset">Скинути</button>
                 </div>
 
                 <label class="map-toggle">
@@ -47,47 +47,48 @@
 
             <div class="map-filters">
                 <div class="map-filter-group">
-                    <span class="map-filter-label">Тип оголошень</span>
+                    <span class="map-filter-label" data-i18n="f.listingType">Тип оголошень</span>
                     <div class="map-chips" id="type-chips">
-                        <button type="button" class="map-chip is-active" data-type="">Усі</button>
-                        <button type="button" class="map-chip" data-type="item">Речі</button>
-                        <button type="button" class="map-chip" data-type="housing">Житло</button>
+                        <button type="button" class="map-chip is-active" data-type="" data-i18n="f.all">Усі</button>
+                        <button type="button" class="map-chip" data-type="item" data-i18n="f.items">Речі</button>
+                        <button type="button" class="map-chip" data-type="housing" data-i18n="f.housing">Житло</button>
                     </div>
                 </div>
 
                 <div class="map-filter-group">
-                    <label class="map-filter-label" for="filter-category">Категорія</label>
+                    <label class="map-filter-label" for="filter-category" data-i18n="f.category">Категорія</label>
                     <select id="filter-category" class="map-filter-select">
-                        <option value="">Усі категорії</option>
+                        <option value="" data-i18n="f.allCategories">Усі категорії</option>
                     </select>
                 </div>
 
                 <div class="map-filter-group">
-                    <span class="map-filter-label">Ціна, ₴</span>
+                    <span class="map-filter-label" data-i18n="f.price">Ціна, ₴</span>
                     <div class="map-filter-row">
-                        <input type="number" id="filter-min-price" class="map-filter-input" placeholder="від" min="0">
-                        <input type="number" id="filter-max-price" class="map-filter-input" placeholder="до" min="0">
+                        <input type="number" id="filter-min-price" class="map-filter-input" data-i18n-placeholder="common.from" placeholder="від" min="0">
+                        <input type="number" id="filter-max-price" class="map-filter-input" data-i18n-placeholder="common.to" placeholder="до" min="0">
                     </div>
                 </div>
 
                 <div class="map-filter-group">
-                    <label class="map-filter-label" for="filter-radius">Відстань</label>
+                    <label class="map-filter-label" for="filter-radius" data-i18n="f.distance">Відстань</label>
                     <select id="filter-radius" class="map-filter-select">
-                        <option value="">Будь-яка</option>
-                        <option value="1">До 1 км</option>
-                        <option value="3">До 3 км</option>
-                        <option value="5">До 5 км</option>
-                        <option value="10">До 10 км</option>
-                        <option value="25">До 25 км</option>
-                        <option value="50">До 50 км</option>
+                        <option value="" data-i18n="f.anyF">Будь-яка</option>
+                        <option value="1" data-i18n="f.km1">До 1 км</option>
+                        <option value="3" data-i18n="f.km3">До 3 км</option>
+                        <option value="5" data-i18n="f.km5">До 5 км</option>
+                        <option value="10" data-i18n="f.km10">До 10 км</option>
+                        <option value="25" data-i18n="f.km25">До 25 км</option>
+                        <option value="50" data-i18n="f.km50">До 50 км</option>
                     </select>
-                    <small id="radius-hint" style="display:block;margin-top:5px;color:#9ca3af;font-size:11.5px;">
+                    <small id="radius-hint" style="display:block;margin-top:5px;color:#9ca3af;font-size:11.5px;" data-i18n="f.locateFirst">
+                        
                         Спочатку визначте своє місцезнаходження
                     </small>
                 </div>
 
                 <div class="map-filter-group">
-                    <span class="map-filter-label">Вільно у період</span>
+                    <span class="map-filter-label" data-i18n="f.availableBetween">Вільно у період</span>
                     <div class="map-filter-row">
                         <input type="date" id="filter-from" class="map-filter-input" aria-label="Дата початку">
                         <input type="date" id="filter-to" class="map-filter-input" aria-label="Дата завершення">
@@ -95,20 +96,20 @@
                 </div>
 
                 <div class="map-filter-group">
-                    <label class="map-filter-label" for="filter-rating">Мінімальний рейтинг власника</label>
+                    <label class="map-filter-label" for="filter-rating" data-i18n="f.minRating">Мінімальний рейтинг власника</label>
                     <select id="filter-rating" class="map-filter-select">
-                        <option value="">Будь-який</option>
-                        <option value="3">3★ і вище</option>
-                        <option value="4">4★ і вище</option>
-                        <option value="4.5">4.5★ і вище</option>
+                        <option value="" data-i18n="f.any">Будь-який</option>
+                        <option value="3" data-i18n="f.rating3">3★ і вище</option>
+                        <option value="4" data-i18n="f.rating4">4★ і вище</option>
+                        <option value="4.5" data-i18n="f.rating45">4.5★ і вище</option>
                     </select>
                 </div>
 
                 <div class="map-filter-group" id="housing-filters" hidden>
-                    <span class="map-filter-label">Параметри житла</span>
+                    <span class="map-filter-label" data-i18n="f.housingParams">Параметри житла</span>
                     <div class="map-filter-row" style="margin-bottom:8px;">
-                        <input type="number" id="filter-min-rooms" class="map-filter-input" placeholder="кімнат від" min="0">
-                        <input type="number" id="filter-max-rooms" class="map-filter-input" placeholder="до" min="0">
+                        <input type="number" id="filter-min-rooms" class="map-filter-input" data-i18n-placeholder="f.roomsFrom" placeholder="кімнат від" min="0">
+                        <input type="number" id="filter-max-rooms" class="map-filter-input" data-i18n-placeholder="common.to" placeholder="до" min="0">
                     </div>
                     <label class="map-checkbox"><input type="checkbox" id="filter-pets"> Можна з тваринами</label>
                     <label class="map-checkbox"><input type="checkbox" id="filter-students"> Підходить студентам</label>
@@ -124,7 +125,7 @@
             </div>
 
             <div class="map-results-header">
-                <span id="results-count">Завантаження…</span>
+                <span id="results-count" data-i18n="common.loading2">Завантаження…</span>
             </div>
 
             <div class="map-results" id="map-results"></div>
@@ -132,7 +133,7 @@
 
         <div class="map-canvas-wrapper">
             <div id="map"></div>
-            <div class="map-loading" id="map-loading" hidden>Завантаження…</div>
+            <div class="map-loading" id="map-loading" hidden data-i18n="common.loading2">Завантаження…</div>
         </div>
     </main>
 

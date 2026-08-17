@@ -276,6 +276,80 @@ const translations = {
         "toast.rentalRequested": "Rental request sent!",
         "toast.profileUpdated": "Profile updated successfully!",
         "toast.loginRequired": "Please log in to perform this action",
+        "common.loading2": "Loading…",
+        "common.from": "from",
+        "common.to": "to",
+        "f.housing": "Housing",
+        "f.items": "Items",
+        "f.all": "All",
+        "f.everything": "Everything",
+        "f.price": "Price, ₴",
+        "f.availableBetween": "Available between",
+        "f.any": "Any",
+        "f.anyF": "Any",
+        "f.pets": "Pets allowed",
+        "f.students": "Suitable for students",
+        "f.category": "Category",
+        "f.allCategories": "All categories",
+        "f.rating3": "3★ and up",
+        "f.rating4": "4★ and up",
+        "f.rating45": "4.5★ and up",
+        "f.verifiedOnly": "Verified owners only",
+        "f.availableNow": "Available now only",
+        "f.placeSearch": "City, village or street…",
+        "f.roomsFrom": "rooms from",
+        "f.areaFrom": "m² from",
+        "f.daily": "Daily",
+        "f.weekly": "Weekly",
+        "f.monthly": "Monthly",
+        "f.shortTerm": "Short-term",
+        "f.longTerm": "Long-term",
+        "f.parking": "Parking",
+        "f.internet": "Internet",
+        "f.hasParking": "Has parking",
+        "f.hasInternet": "Has internet",
+        "f.furnished": "Furnished",
+        "f.utilities": "Utilities included",
+        "f.resetFilters": "Reset filters",
+        "f.reset": "Reset",
+        "f.sortNewest": "Newest",
+        "f.sortCheap": "Cheapest first",
+        "f.sortExpensive": "Most expensive first",
+        "f.sortRating": "By rating",
+        "f.sortPopular": "Most popular",
+        "f.nearMe": "📍 Near me",
+        "f.searchInView": "Search in visible map area",
+        "f.listingType": "Listing type",
+        "f.type": "Type",
+        "f.distance": "Distance",
+        "f.km1": "Up to 1 km",
+        "f.km3": "Up to 3 km",
+        "f.km5": "Up to 5 km",
+        "f.km10": "Up to 10 km",
+        "f.km25": "Up to 25 km",
+        "f.km50": "Up to 50 km",
+        "f.locateFirst": "Set your location first",
+        "f.minRating": "Minimum owner rating",
+        "f.ownerRating": "Owner rating",
+        "f.housingParams": "Housing options",
+        "f.housingTitle": "Housing rentals",
+        "f.housingSubtitle": "Apartments, houses, rooms and student housing across Ukraine",
+        "f.onMap": "🗺️ On the map",
+        "f.rooms": "Rooms",
+        "f.area": "Area, m²",
+        "f.rentalPeriod": "Rental period",
+        "f.anyPeriod": "Any period",
+        "f.amenities": "Amenities",
+        "f.search": "Search",
+        "f.filters": "Filters",
+        "f.city": "City",
+        "f.cityExample": "e.g. Kyiv",
+        "f.whatLooking": "What are you looking for?",
+        "f.messages": "Messages",
+        "f.pickChat": "Pick a conversation",
+        "f.chatEmpty": "Your messages will appear here.",
+        "f.send": "Send",
+        "f.writeMessage": "Write a message…",
         "common.unknown": "Unknown"
     },
     uk: {
@@ -550,13 +624,90 @@ const translations = {
         "toast.rentalRequested": "Запит на оренду надіслано!",
         "toast.profileUpdated": "Профіль успішно оновлено!",
         "toast.loginRequired": "Будь ласка, увійдіть, щоб виконати цю дію",
+        "common.loading2": "Завантаження…",
+        "common.from": "від",
+        "common.to": "до",
+        "f.housing": "Житло",
+        "f.items": "Речі",
+        "f.all": "Усі",
+        "f.everything": "Усе",
+        "f.price": "Ціна, ₴",
+        "f.availableBetween": "Вільно у період",
+        "f.any": "Будь-який",
+        "f.anyF": "Будь-яка",
+        "f.pets": "Можна з тваринами",
+        "f.students": "Підходить студентам",
+        "f.category": "Категорія",
+        "f.allCategories": "Усі категорії",
+        "f.rating3": "3★ і вище",
+        "f.rating4": "4★ і вище",
+        "f.rating45": "4.5★ і вище",
+        "f.verifiedOnly": "Лише перевірені власники",
+        "f.availableNow": "Лише доступні зараз",
+        "f.placeSearch": "Місто, село або вулиця…",
+        "f.roomsFrom": "кімнат від",
+        "f.areaFrom": "м² від",
+        "f.daily": "Подобово",
+        "f.weekly": "Потижнево",
+        "f.monthly": "Помісячно",
+        "f.shortTerm": "Короткостроково",
+        "f.longTerm": "Довгостроково",
+        "f.parking": "Паркінг",
+        "f.internet": "Інтернет",
+        "f.hasParking": "Є паркінг",
+        "f.hasInternet": "Є інтернет",
+        "f.furnished": "З меблями",
+        "f.utilities": "Комуналка включена",
+        "f.resetFilters": "Скинути фільтри",
+        "f.reset": "Скинути",
+        "f.sortNewest": "Найновіші",
+        "f.sortCheap": "Спочатку дешевші",
+        "f.sortExpensive": "Спочатку дорожчі",
+        "f.sortRating": "За рейтингом",
+        "f.sortPopular": "Найпопулярніші",
+        "f.nearMe": "📍 Поруч зі мною",
+        "f.searchInView": "Шукати у видимій області карти",
+        "f.listingType": "Тип оголошень",
+        "f.type": "Тип",
+        "f.distance": "Відстань",
+        "f.km1": "До 1 км",
+        "f.km3": "До 3 км",
+        "f.km5": "До 5 км",
+        "f.km10": "До 10 км",
+        "f.km25": "До 25 км",
+        "f.km50": "До 50 км",
+        "f.locateFirst": "Спочатку визначте своє місцезнаходження",
+        "f.minRating": "Мінімальний рейтинг власника",
+        "f.ownerRating": "Рейтинг власника",
+        "f.housingParams": "Параметри житла",
+        "f.housingTitle": "Оренда житла",
+        "f.housingSubtitle": "Квартири, будинки, кімнати та житло для студентів по всій Україні",
+        "f.onMap": "🗺️ На карті",
+        "f.rooms": "Кімнат",
+        "f.area": "Площа, м²",
+        "f.rentalPeriod": "Термін оренди",
+        "f.anyPeriod": "Будь-який термін",
+        "f.amenities": "Зручності",
+        "f.search": "Шукати",
+        "f.filters": "Фільтри",
+        "f.city": "Місто",
+        "f.cityExample": "Напр., Київ",
+        "f.whatLooking": "Що ви шукаєте?",
+        "f.messages": "Повідомлення",
+        "f.pickChat": "Оберіть діалог",
+        "f.chatEmpty": "Тут з’являться ваші повідомлення.",
+        "f.send": "Надіслати",
+        "f.writeMessage": "Напишіть повідомлення…",
         "common.unknown": "Невідомо"
     }
 };
 
 class I18n {
     constructor() {
-        this.currentLang = localStorage.getItem('arthings-lang') || 'en';
+        // Ukrainian by default: this is a Ukrainian marketplace, and most of
+        // the interface is authored in Ukrainian. Defaulting to English meant
+        // a first-time visitor saw English page copy under a Ukrainian navbar.
+        this.currentLang = localStorage.getItem('arthings-lang') || 'uk';
         this.translations = translations;
     }
 
@@ -625,11 +776,18 @@ class I18n {
     }
 
     init() {
-        // Set up language switcher listeners
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                this.setLanguage(btn.dataset.lang);
-            });
+        // Delegated from the document rather than bound to each button.
+        //
+        // The navbar — and with it the language switcher — is rendered by
+        // navbar.js on DOMContentLoaded. This script is loaded first, so its
+        // listener runs first: querying for .lang-btn here found nothing and
+        // silently bound no handlers at all, leaving the switcher dead on
+        // every page. Delegation removes the ordering dependency entirely.
+        document.addEventListener('click', event => {
+            const button = event.target.closest('.lang-btn');
+            if (button && button.dataset.lang) {
+                this.setLanguage(button.dataset.lang);
+            }
         });
 
         // Initial update

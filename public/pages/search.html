@@ -134,10 +134,10 @@
     <section class="search-bar-section">
         <div class="container">
             <form class="search-bar" id="search-form">
-                <input type="text" id="q" name="q" placeholder="Що ви шукаєте?" autocomplete="off"
+                <input type="text" id="q" name="q" data-i18n-placeholder="f.whatLooking" placeholder="Що ви шукаєте?" autocomplete="off"
                     aria-label="Пошуковий запит">
-                <button type="submit" class="btn btn-primary">Шукати</button>
-                <button type="button" class="btn btn-ghost filters-toggle-mobile" id="toggle-filters">Фільтри</button>
+                <button type="submit" class="btn btn-primary" data-i18n="f.search">Шукати</button>
+                <button type="button" class="btn btn-ghost filters-toggle-mobile" id="toggle-filters" data-i18n="f.filters">Фільтри</button>
             </form>
         </div>
     </section>
@@ -146,36 +146,36 @@
         <div class="search-layout">
             <aside class="search-filters is-collapsed" id="filters">
                 <div class="fblock">
-                    <div class="ftitle">Тип</div>
+                    <div class="ftitle" data-i18n="f.type">Тип</div>
                     <div class="type-chips" id="type-chips">
-                        <button type="button" class="type-chip is-active" data-type="">Усе</button>
-                        <button type="button" class="type-chip" data-type="item">Речі</button>
-                        <button type="button" class="type-chip" data-type="housing">Житло</button>
+                        <button type="button" class="type-chip is-active" data-type="" data-i18n="f.everything">Усе</button>
+                        <button type="button" class="type-chip" data-type="item" data-i18n="f.items">Речі</button>
+                        <button type="button" class="type-chip" data-type="housing" data-i18n="f.housing">Житло</button>
                     </div>
                 </div>
 
                 <div class="fblock">
-                    <div class="ftitle">Категорія</div>
+                    <div class="ftitle" data-i18n="f.category">Категорія</div>
                     <select id="f-category" class="fselect">
-                        <option value="">Усі категорії</option>
+                        <option value="" data-i18n="f.allCategories">Усі категорії</option>
                     </select>
                 </div>
 
                 <div class="fblock">
-                    <div class="ftitle">Ціна, ₴</div>
+                    <div class="ftitle" data-i18n="f.price">Ціна, ₴</div>
                     <div class="fduo">
-                        <input type="number" id="f-min-price" class="finput" placeholder="від" min="0">
-                        <input type="number" id="f-max-price" class="finput" placeholder="до" min="0">
+                        <input type="number" id="f-min-price" class="finput" data-i18n-placeholder="common.from" placeholder="від" min="0">
+                        <input type="number" id="f-max-price" class="finput" data-i18n-placeholder="common.to" placeholder="до" min="0">
                     </div>
                 </div>
 
                 <div class="fblock">
-                    <div class="ftitle">Місто</div>
-                    <input type="text" id="f-city" class="finput" placeholder="Напр., Київ">
+                    <div class="ftitle" data-i18n="f.city">Місто</div>
+                    <input type="text" id="f-city" class="finput" data-i18n-placeholder="f.cityExample" placeholder="Напр., Київ">
                 </div>
 
                 <div class="fblock">
-                    <div class="ftitle">Вільно у період</div>
+                    <div class="ftitle" data-i18n="f.availableBetween">Вільно у період</div>
                     <div class="fduo">
                         <input type="date" id="f-from" class="finput" aria-label="Від">
                         <input type="date" id="f-to" class="finput" aria-label="До">
@@ -183,32 +183,32 @@
                 </div>
 
                 <div class="fblock">
-                    <div class="ftitle">Рейтинг власника</div>
+                    <div class="ftitle" data-i18n="f.ownerRating">Рейтинг власника</div>
                     <select id="f-rating" class="fselect">
-                        <option value="">Будь-який</option>
-                        <option value="3">3★ і вище</option>
-                        <option value="4">4★ і вище</option>
-                        <option value="4.5">4.5★ і вище</option>
+                        <option value="" data-i18n="f.any">Будь-який</option>
+                        <option value="3" data-i18n="f.rating3">3★ і вище</option>
+                        <option value="4" data-i18n="f.rating4">4★ і вище</option>
+                        <option value="4.5" data-i18n="f.rating45">4.5★ і вище</option>
                     </select>
                 </div>
 
                 <div class="fblock" id="housing-only" hidden>
-                    <div class="ftitle">Житло</div>
+                    <div class="ftitle" data-i18n="f.housing">Житло</div>
                     <div class="fduo" style="margin-bottom:0.5rem;">
-                        <input type="number" id="f-min-rooms" class="finput" placeholder="кімнат від" min="0">
-                        <input type="number" id="f-max-rooms" class="finput" placeholder="до" min="0">
+                        <input type="number" id="f-min-rooms" class="finput" data-i18n-placeholder="f.roomsFrom" placeholder="кімнат від" min="0">
+                        <input type="number" id="f-max-rooms" class="finput" data-i18n-placeholder="common.to" placeholder="до" min="0">
                     </div>
                     <div class="fduo" style="margin-bottom:0.5rem;">
-                        <input type="number" id="f-min-area" class="finput" placeholder="м² від" min="0">
-                        <input type="number" id="f-max-area" class="finput" placeholder="до" min="0">
+                        <input type="number" id="f-min-area" class="finput" data-i18n-placeholder="f.areaFrom" placeholder="м² від" min="0">
+                        <input type="number" id="f-max-area" class="finput" data-i18n-placeholder="common.to" placeholder="до" min="0">
                     </div>
                     <select id="f-period" class="fselect" style="margin-bottom:0.5rem;">
-                        <option value="">Будь-який термін</option>
-                        <option value="daily">Подобово</option>
-                        <option value="weekly">Потижнево</option>
-                        <option value="monthly">Помісячно</option>
-                        <option value="short_term">Короткостроково</option>
-                        <option value="long_term">Довгостроково</option>
+                        <option value="" data-i18n="f.anyPeriod">Будь-який термін</option>
+                        <option value="daily" data-i18n="f.daily">Подобово</option>
+                        <option value="weekly" data-i18n="f.weekly">Потижнево</option>
+                        <option value="monthly" data-i18n="f.monthly">Помісячно</option>
+                        <option value="short_term" data-i18n="f.shortTerm">Короткостроково</option>
+                        <option value="long_term" data-i18n="f.longTerm">Довгостроково</option>
                     </select>
                     <label class="fcheck"><input type="checkbox" id="f-pets"> Можна з тваринами</label>
                     <label class="fcheck"><input type="checkbox" id="f-students"> Підходить студентам</label>
@@ -222,20 +222,21 @@
                     <label class="fcheck"><input type="checkbox" id="f-available"> Лише доступні зараз</label>
                 </div>
 
-                <button type="button" class="btn btn-ghost" id="reset-filters" style="width:100%;">
+                <button type="button" class="btn btn-ghost" id="reset-filters" style="width:100%;" data-i18n="f.resetFilters">
+                    
                     Скинути фільтри
                 </button>
             </aside>
 
             <main>
                 <div class="search-toolbar">
-                    <span class="result-count" id="result-count">Завантаження…</span>
+                    <span class="result-count" id="result-count" data-i18n="common.loading2">Завантаження…</span>
                     <select id="sort" class="fselect" style="width:auto;">
-                        <option value="newest">Найновіші</option>
-                        <option value="price-asc">Спочатку дешевші</option>
-                        <option value="price-desc">Спочатку дорожчі</option>
-                        <option value="rating">За рейтингом</option>
-                        <option value="popular">Найпопулярніші</option>
+                        <option value="newest" data-i18n="f.sortNewest">Найновіші</option>
+                        <option value="price-asc" data-i18n="f.sortCheap">Спочатку дешевші</option>
+                        <option value="price-desc" data-i18n="f.sortExpensive">Спочатку дорожчі</option>
+                        <option value="rating" data-i18n="f.sortRating">За рейтингом</option>
+                        <option value="popular" data-i18n="f.sortPopular">Найпопулярніші</option>
                     </select>
                 </div>
 
