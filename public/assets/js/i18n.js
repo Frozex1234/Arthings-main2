@@ -80,6 +80,11 @@ const translations = {
         "category.home": "Home & Garden",
         "category.housing": "Housing",
         "category.sports": "Sports & Fitness",
+        "category.vehicles": "Vehicles & Transport",
+        "category.music": "Music & Audio",
+        "category.party": "Party & Events",
+        "category.baby": "Baby & Kids",
+        "category.fashion": "Fashion & Accessories",
         "category.other": "Other",
 
         // Product Card
@@ -428,6 +433,11 @@ const translations = {
         "category.home": "Дім і сад",
         "category.housing": "Житло",
         "category.sports": "Спорт",
+        "category.vehicles": "Транспорт",
+        "category.music": "Музика та аудіо",
+        "category.party": "Свята та події",
+        "category.baby": "Дитячі товари",
+        "category.fashion": "Мода та аксесуари",
         "category.other": "Інше",
 
         // Product Card

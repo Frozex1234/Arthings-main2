@@ -344,7 +344,19 @@ const categoryIcons = {
 };
 
 function getCategoryName(categoryId) {
-    return i18n.t(`category.${categoryId}`) || categoryId;
+    if (!categoryId) return '';
+
+    const key = `category.${categoryId}`;
+    const translated = i18n.t(key);
+
+    // t() returns the key itself when a translation is missing, so the old
+    // `|| categoryId` fallback never fired and an untranslated category
+    // rendered as the raw key — "CATEGORY.VEHICLES" on screen. Detect that
+    // case explicitly and show a readable name instead.
+    if (translated === key) {
+        return categoryId.charAt(0).toUpperCase() + categoryId.slice(1);
+    }
+    return translated;
 }
 
 function getCategoryIcon(categoryId) {
