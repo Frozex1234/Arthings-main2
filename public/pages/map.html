@@ -47,6 +47,12 @@
 
             <div class="map-filters">
                 <div class="map-filter-group">
+                    <label class="map-filter-label" for="filter-query" data-i18n="f.searchListings">Пошук оголошень</label>
+                    <input type="text" id="filter-query" class="map-filter-input" autocomplete="off"
+                        data-i18n-placeholder="f.searchExample" placeholder="Напр., генератор, дриль, намет">
+                </div>
+
+                <div class="map-filter-group">
                     <span class="map-filter-label" data-i18n="f.listingType">Тип оголошень</span>
                     <div class="map-chips" id="type-chips">
                         <button type="button" class="map-chip is-active" data-type="" data-i18n="f.all">Усі</button>
@@ -173,6 +179,10 @@
 
                 const filters = {
                     listingType: listingType || undefined,
+                    // Free-text match on title and description, so the map can
+                    // answer "where is a generator" and not just "where is
+                    // anything".
+                    search: value('filter-query'),
                     category: value('filter-category'),
                     minPrice: value('filter-min-price'),
                     maxPrice: value('filter-max-price'),
@@ -296,6 +306,10 @@
                     const el = document.getElementById(id);
                     if (el) el.addEventListener('change', debounced);
                 });
+
+                // Text input: react as the user types rather than on blur.
+                document.getElementById('filter-query')
+                    .addEventListener('input', debounced);
 
                 els.radius.addEventListener('change', () => {
                     if (els.radius.value && !arthingsMap.userLocation) {

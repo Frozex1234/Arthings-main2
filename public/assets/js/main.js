@@ -242,7 +242,7 @@ function createProductCard(product, showActions = false) {
         : '/assets/images/placeholder.png';
 
     const categoryName = getCategoryName(product.category);
-    const priceUnit = product.priceUnit === 'week' ? i18n.t('product.perWeek') : i18n.t('product.perDay');
+    const priceUnit = formatPriceUnit(product.priceUnit);
 
     card.innerHTML = `
         <div class="card-image">
@@ -342,6 +342,22 @@ const categoryIcons = {
     sports: '⚽',
     other: '📦'
 };
+
+/**
+ * Human label for a listing's price unit.
+ *
+ * The old inline check only recognised 'week' and fell through to "per day"
+ * for everything else, so monthly housing — which is most of it — advertised
+ * a daily price.
+ */
+function formatPriceUnit(unit) {
+    switch (unit) {
+        case 'hour': return i18n.t('product.perHour');
+        case 'week': return i18n.t('product.perWeek');
+        case 'month': return i18n.t('product.perMonth');
+        default: return i18n.t('product.perDay');
+    }
+}
 
 function getCategoryName(categoryId) {
     if (!categoryId) return '';
@@ -552,6 +568,7 @@ window.getCsrfToken = getCsrfToken;
 window.createProductCard = createProductCard;
 window.toggleFavorite = toggleFavorite;
 window.getCategoryName = getCategoryName;
+window.formatPriceUnit = formatPriceUnit;
 window.getCategoryIcon = getCategoryIcon;
 window.escapeHtml = escapeHtml;
 window.formatDate = formatDate;

@@ -116,7 +116,7 @@
             const container = document.getElementById('product-content');
             const isOwner = currentUser && currentUser.id === product.userId;
             const categoryName = getCategoryName(product.category);
-            const priceUnit = product.priceUnit === 'week' ? i18n.t('product.perWeek') : i18n.t('product.perDay');
+            const priceUnit = formatPriceUnit(product.priceUnit);
 
             // Main image
             const mainImage = product.images && product.images.length > 0

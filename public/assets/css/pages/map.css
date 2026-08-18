@@ -166,6 +166,10 @@
 }
 
 .map-filter-row { display: flex; gap: 8px; }
+/* Flex children default to min-width:auto, and a date input's intrinsic
+   minimum (дд.мм.рррр plus the calendar icon) is wider than half a filter
+   column — so the pair overflowed the panel. min-width:0 lets them shrink. */
+.map-filter-row > * { min-width: 0; flex: 1; }
 
 .map-filter-input,
 .map-filter-select {
